@@ -99,6 +99,18 @@ class CxtAdm(iscsi.ISCSITarget):
 
         return portal_ip + portal_port
 
+    @staticmethod
+    def _get_portal(ip, port=None):
+        # ipv6 addresses use [ip]:port format, ipv4 use ip:port
+        portal_port = ':%d' % port if port else ''
+
+        if netutils.is_valid_ipv4(ip):
+            portal_ip = ip
+        else:
+            portal_ip = '[' + ip + ']'
+
+        return portal_ip + portal_port
+
     def create_iscsi_target(self, name, tid, lun, path,
                             chap_auth=None, **kwargs):
 

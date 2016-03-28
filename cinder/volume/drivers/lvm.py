@@ -711,6 +711,7 @@ class LVMVolumeDriver(driver.VolumeDriver):
             # copy_volume expects sizes in MiB, we store integer GiB
             # be sure to convert before passing in
             size_in_mb = int(volume['size']) * units.Ki
+<<<<<<< HEAD
             try:
                 volutils.copy_volume(self.local_path(volume),
                                      self.local_path(volume, vg=dest_vg),
@@ -724,6 +725,13 @@ class LVMVolumeDriver(driver.VolumeDriver):
                                   "exception: %(reason)s."),
                               {'reason': six.text_type(e)}, resource=volume)
                     dest_vg_ref.delete(volume)
+=======
+            volutils.copy_volume(self.local_path(volume),
+                                 self.local_path(volume, vg=dest_vg),
+                                 size_in_mb,
+                                 self.configuration.volume_dd_blocksize,
+                                 execute=self._execute)
+>>>>>>> refs/remotes/openstack/stable/kilo
             self._delete_volume(volume)
 
             return (True, None)

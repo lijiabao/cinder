@@ -125,10 +125,17 @@ class LioAdm(iscsi.ISCSITarget):
                             chap_auth_password,
                             self.iscsi_protocol == 'iser'] + optional_args
             self._execute(*command_args, run_as_root=True)
+<<<<<<< HEAD
         except putils.ProcessExecutionError:
             LOG.exception(_LE("Failed to create iscsi target for volume "
                               "id:%s."), vol_id)
 
+=======
+        except putils.ProcessExecutionError as e:
+            LOG.error(_LE("Failed to create iscsi target for volume "
+                          "id:%s.") % vol_id)
+            LOG.error(_LE("%s") % e)
+>>>>>>> refs/remotes/openstack/stable/kilo
             raise exception.ISCSITargetCreateFailed(volume_id=vol_id)
 
         iqn = '%s%s' % (self.iscsi_target_prefix, vol_id)

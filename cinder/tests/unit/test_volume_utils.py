@@ -749,6 +749,7 @@ class VolumeUtilsTestCase(test.TestCase):
 
         host_2 = 'fake_host2@backend1'
         self.assertFalse(volume_utils.hosts_are_equivalent(host_1, host_2))
+<<<<<<< HEAD:cinder/tests/unit/test_volume_utils.py
 
     def test_check_managed_volume_already_managed(self):
         mock_db = mock.Mock()
@@ -826,3 +827,5 @@ class VolumeUtilsTestCase(test.TestCase):
         self.assertRaises(exception.SnapshotLimitExceeded,
                           volume_utils.process_reserve_over_quota,
                           ctxt, over_two, usages, quotas, size)
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_volume_utils.py

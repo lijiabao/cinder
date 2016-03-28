@@ -273,11 +273,17 @@ class GlanceImageService(object):
         return base_image_meta
 
     def get_location(self, context, image_id):
+<<<<<<< HEAD
         """Get backend storage location url.
 
         Returns a tuple containing the direct url and locations representing
         the backend storage location, or (None, None) if these attributes are
         not shown by Glance.
+=======
+        """Returns a tuple of the direct url and locations representing the
+        backend storage location, or (None, None) if these attributes are not
+        shown by Glance.
+>>>>>>> refs/remotes/openstack/stable/kilo
         """
         if CONF.glance_api_version == 1:
             # image location not available in v1
@@ -330,7 +336,11 @@ class GlanceImageService(object):
             for url in urls:
                 if url is None:
                     continue
+<<<<<<< HEAD
                 parsed_url = urllib.parse.urlparse(url)
+=======
+                parsed_url = urlparse.urlparse(url)
+>>>>>>> refs/remotes/openstack/stable/kilo
                 if parsed_url.scheme == "file":
                     # a system call to cp could have significant performance
                     # advantages, however we do not have the path to files at

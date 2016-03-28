@@ -541,12 +541,18 @@ class TestGlanceImageService(test.TestCase):
         self.assertRaises(exception.ImageNotFound, service.download,
                           self.context, image_id, writer)
 
+<<<<<<< HEAD:cinder/tests/unit/image/test_glance.py
     @mock.patch('six.moves.builtins.open')
     @mock.patch('shutil.copyfileobj')
     @mock.patch('cinder.image.glance.get_api_servers',
                 return_value=itertools.cycle([(False, 'localhost:9292')]))
     def test_download_from_direct_file(self, api_servers,
                                        mock_copyfileobj, mock_open):
+=======
+    @mock.patch('__builtin__.open')
+    @mock.patch('shutil.copyfileobj')
+    def test_download_from_direct_file(self, mock_copyfileobj, mock_open):
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/image/test_glance.py
         fixture = self._make_fixture(name='test image',
                                      locations=[{'url': 'file:///tmp/test'}])
         image_id = self.service.create(self.context, fixture)['id']
@@ -556,11 +562,17 @@ class TestGlanceImageService(test.TestCase):
         self.service.download(self.context, image_id, writer)
         mock_copyfileobj.assert_called_once_with(mock.ANY, writer)
 
+<<<<<<< HEAD:cinder/tests/unit/image/test_glance.py
     @mock.patch('six.moves.builtins.open')
     @mock.patch('shutil.copyfileobj')
     @mock.patch('cinder.image.glance.get_api_servers',
                 return_value=itertools.cycle([(False, 'localhost:9292')]))
     def test_download_from_direct_file_non_file(self, api_servers,
+=======
+    @mock.patch('__builtin__.open')
+    @mock.patch('shutil.copyfileobj')
+    def test_download_from_direct_file_non_file(self,
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/image/test_glance.py
                                                 mock_copyfileobj, mock_open):
         fixture = self._make_fixture(name='test image',
                                      direct_url='swift+http://test/image')
@@ -569,7 +581,11 @@ class TestGlanceImageService(test.TestCase):
         self.flags(allowed_direct_url_schemes=['file'])
         self.flags(glance_api_version=2)
         self.service.download(self.context, image_id, writer)
+<<<<<<< HEAD:cinder/tests/unit/image/test_glance.py
         self.assertIsNone(mock_copyfileobj.call_args)
+=======
+        self.assertEqual(None, mock_copyfileobj.call_args)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/image/test_glance.py
 
     def test_glance_client_image_id(self):
         fixture = self._make_fixture(name='test image')

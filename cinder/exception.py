@@ -48,7 +48,11 @@ CONF.register_opts(exc_log_opts)
 
 
 class ConvertedException(webob.exc.WSGIHTTPException):
+<<<<<<< HEAD
     def __init__(self, code=500, title="", explanation=""):
+=======
+    def __init__(self, code=400, title="", explanation=""):
+>>>>>>> refs/remotes/openstack/stable/kilo
         self.code = code
         # There is a strict rule about constructing status line for HTTP:
         # '...Status-Line, consisting of the protocol version followed by a

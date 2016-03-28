@@ -57,6 +57,7 @@ class HnasBackend(object):
         if self.drv_configs['ssh_enabled'] != 'True':
             # Direct connection via ssc
             args = (cmd, '--user', user, '--password', pw, ip0) + args
+<<<<<<< HEAD:cinder/volume/drivers/hitachi/hnas_backend.py
 
             try:
                 out, err = utils.execute(*args, **kwargs)
@@ -74,6 +75,12 @@ class HnasBackend(object):
                     raise exception.HNASConnError(msg)
                 else:
                     raise
+=======
+            out, err = utils.execute(*args, **kwargs)
+            LOG.debug("command %(cmd)s result: out = %(out)s - err = "
+                      "%(err)s", {'cmd': cmd, 'out': out, 'err': err})
+            return out, err
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/hds/hnas_backend.py
         else:
             if self.drv_configs['cluster_admin_ip0'] is None:
                 # Connect to SMU through SSH and run ssc locally

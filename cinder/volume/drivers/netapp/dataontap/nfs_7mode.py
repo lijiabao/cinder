@@ -124,6 +124,7 @@ class NetApp7modeNfsDriver(nfs_base.NetAppNfsDriver):
             pool['pool_name'] = nfs_share
             pool['QoS_support'] = False
             pool.update(capacity)
+<<<<<<< HEAD
 
             thick = not self.configuration.nfs_sparsed_volumes
             pool['thick_provisioning_support'] = thick
@@ -133,6 +134,8 @@ class NetApp7modeNfsDriver(nfs_base.NetAppNfsDriver):
             pool['utilization'] = na_utils.round_down(utilization, '0.01')
             pool['filter_function'] = filter_function
             pool['goodness_function'] = goodness_function
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
 
             pools.append(pool)
 

@@ -12,8 +12,14 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
+<<<<<<< HEAD:cinder/tests/unit/brick/test_brick_lvm.py
 import mock
 from mox3 import mox
+=======
+
+import mock
+import mox
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/brick/test_brick_lvm.py
 from oslo_concurrency import processutils
 
 from cinder.brick.local_dev import lvm as brick
@@ -346,7 +352,11 @@ class BrickLvmTestCase(test.TestCase):
         self.mox.VerifyAll()
 
     def test_get_mirrored_available_capacity(self):
+<<<<<<< HEAD:cinder/tests/unit/brick/test_brick_lvm.py
         self.assertEqual(2.0, self.vg.vg_mirror_free_space(1))
+=======
+        self.assertEqual(self.vg.vg_mirror_free_space(1), 2.0)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/brick/test_brick_lvm.py
 
     def test_lv_extend(self):
         self.vg.deactivate_lv = mock.MagicMock()

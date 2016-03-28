@@ -993,7 +993,11 @@ class TestCinderRtstoolCmd(test.TestCase):
     def test_create_ipv6(self):
         self._test_create('::0')
 
+<<<<<<< HEAD:cinder/tests/unit/test_cmd.py
     @mock.patch.object(cinder_rtstool, 'rtslib_fb', autospec=True)
+=======
+    @mock.patch.object(cinder_rtstool, 'rtslib', autospec=True)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_cmd.py
     def test_create_ips_and_port(self, mock_rtslib):
         port = 3261
         ips = ['ip1', 'ip2', 'ip3']
@@ -1025,7 +1029,11 @@ class TestCinderRtstoolCmd(test.TestCase):
             any_order=True
         )
 
+<<<<<<< HEAD:cinder/tests/unit/test_cmd.py
     @mock.patch.object(rtslib_fb.root, 'RTSRoot')
+=======
+    @mock.patch('rtslib.root.RTSRoot')
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_cmd.py
     def test_add_initiator_rtslib_error(self, rtsroot):
         rtsroot.side_effect = rtslib_fb.utils.RTSLibError()
 

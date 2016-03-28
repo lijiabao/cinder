@@ -82,7 +82,10 @@ class NetAppNfsDriver(driver.ManageableVD,
         self._context = context
         na_utils.check_flags(self.REQUIRED_FLAGS, self.configuration)
         self.zapi_client = None
+<<<<<<< HEAD
         self.ssc_enabled = False
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def check_for_setup_error(self):
         """Returns an error if prerequisites aren't met."""
@@ -530,7 +533,11 @@ class NetAppNfsDriver(driver.ManageableVD,
                                                      run_as_root=run_as_root)
                 if img_info.file_format == 'raw':
                     LOG.debug('Image is raw %s', image_id)
+<<<<<<< HEAD
                     self._clone_backing_file_for_volume(
+=======
+                    self._clone_volume(
+>>>>>>> refs/remotes/openstack/stable/kilo
                         img_file, volume['name'],
                         volume_id=None, share=share)
                     cloned = True
@@ -693,7 +700,11 @@ class NetAppNfsDriver(driver.ManageableVD,
                 if not share_location or not mountpoint:
                     continue
                 url = location['url']
+<<<<<<< HEAD
                 url_parse = urllib.parse.urlparse(url)
+=======
+                url_parse = urlparse.urlparse(url)
+>>>>>>> refs/remotes/openstack/stable/kilo
                 abs_path = os.path.join(url_parse.netloc, url_parse.path)
                 rel_path = os.path.relpath(abs_path, mountpoint)
                 direct_url = "%s/%s" % (share_location, rel_path)
@@ -705,6 +716,7 @@ class NetAppNfsDriver(driver.ManageableVD,
 
         LOG.info(_LI('Extending volume %s.'), volume['name'])
 
+<<<<<<< HEAD
         try:
             path = self.local_path(volume)
             self._resize_image_file(path, new_size)
@@ -730,6 +742,8 @@ class NetAppNfsDriver(driver.ManageableVD,
                               'msg': six.text_type(err)})
             raise exception.VolumeBackendAPIException(data=exception_msg)
 
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
     def _is_share_clone_compatible(self, volume, share):
         """Checks if share is compatible with volume to host its clone."""
         raise NotImplementedError()
@@ -740,11 +754,19 @@ class NetAppNfsDriver(driver.ManageableVD,
 
         total_size, total_available = self._get_capacity_info(share)
 
+<<<<<<< HEAD
         reserved_ratio = self.reserved_percentage / 100.0
         reserved = int(round(total_size * reserved_ratio))
         available = max(0, total_available - reserved)
         if thin:
             available = available * self.max_over_subscription_ratio
+=======
+        reserved_ratio = 1.0 - self.configuration.nfs_used_ratio
+        reserved = int(round(total_size * reserved_ratio))
+        available = max(0, total_available - reserved)
+        if thin:
+            available = available * self.configuration.nfs_oversub_ratio
+>>>>>>> refs/remotes/openstack/stable/kilo
 
         return available >= requested_size
 
@@ -794,6 +816,7 @@ class NetAppNfsDriver(driver.ManageableVD,
     def _get_share_capacity_info(self, nfs_share):
         """Returns the share capacity metrics needed by the scheduler."""
 
+<<<<<<< HEAD
         capacity = dict()
         capacity['reserved_percentage'] = self.reserved_percentage
         capacity['max_over_subscription_ratio'] = (
@@ -805,6 +828,30 @@ class NetAppNfsDriver(driver.ManageableVD,
             total_available / units.Gi, '0.01')
         capacity['provisioned_capacity_gb'] = (round(
             capacity['total_capacity_gb'] - capacity['free_capacity_gb'], 2))
+=======
+        used_ratio = self.configuration.nfs_used_ratio
+        oversub_ratio = self.configuration.nfs_oversub_ratio
+
+        # The scheduler's capacity filter will reduce the amount of
+        # free space that we report to it by the reserved percentage.
+        reserved_ratio = 1 - used_ratio
+        reserved_percentage = round(100 * reserved_ratio)
+
+        total_size, total_available = self._get_capacity_info(nfs_share)
+
+        apparent_size = total_size * oversub_ratio
+        apparent_size_gb = na_utils.round_down(
+            apparent_size / units.Gi, '0.01')
+
+        apparent_free_size = total_available * oversub_ratio
+        apparent_free_gb = na_utils.round_down(
+            float(apparent_free_size) / units.Gi, '0.01')
+
+        capacity = dict()
+        capacity['reserved_percentage'] = reserved_percentage
+        capacity['total_capacity_gb'] = apparent_size_gb
+        capacity['free_capacity_gb'] = apparent_free_gb
+>>>>>>> refs/remotes/openstack/stable/kilo
 
         return capacity
 
@@ -813,7 +860,11 @@ class NetAppNfsDriver(driver.ManageableVD,
         export_path = nfs_share.rsplit(':', 1)[1]
         return self.zapi_client.get_flexvol_capacity(export_path)
 
+<<<<<<< HEAD
     def _check_volume_type(self, volume, share, file_name, extra_specs):
+=======
+    def _check_volume_type(self, volume, share, file_name):
+>>>>>>> refs/remotes/openstack/stable/kilo
         """Match volume type for share file."""
         raise NotImplementedError()
 

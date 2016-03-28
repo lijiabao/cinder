@@ -55,12 +55,17 @@ class Client(client_base.Client):
 
         ontapi_version = self.get_ontapi_version()   # major, minor
 
+<<<<<<< HEAD
         ontapi_1_2x = (1, 20) <= ontapi_version < (1, 30)
         ontapi_1_30 = ontapi_version >= (1, 30)
         self.features.add_feature('SYSTEM_METRICS', supported=ontapi_1_2x)
         self.features.add_feature('FAST_CLONE_DELETE', supported=ontapi_1_30)
         self.features.add_feature('SYSTEM_CONSTITUENT_METRICS',
                                   supported=ontapi_1_30)
+=======
+        ontapi_1_30 = ontapi_version >= (1, 30)
+        self.features.add_feature('FAST_CLONE_DELETE', supported=ontapi_1_30)
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def _invoke_vserver_api(self, na_element, vserver):
         server = copy.copy(self.connection)
@@ -727,7 +732,10 @@ class Client(client_base.Client):
 
         return size_total, size_available
 
+<<<<<<< HEAD
     @utils.trace_method
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
     def delete_file(self, path_to_file):
         """Delete file at path."""
 
@@ -738,6 +746,7 @@ class Client(client_base.Client):
         if self.features.FAST_CLONE_DELETE:
             api_args['is-clone-file'] = 'true'
         self.send_request('file-delete-file', api_args, True)
+<<<<<<< HEAD
 
     def _get_aggregates(self, aggregate_names=None, desired_attributes=None):
 
@@ -948,3 +957,5 @@ class Client(client_base.Client):
                     'volume %(vol)s.')
             msg_args = {'snap': snapshot_name, 'vol': volume_name}
             raise exception.VolumeBackendAPIException(data=msg % msg_args)
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo

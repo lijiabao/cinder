@@ -1049,8 +1049,14 @@ class VolumeManager(manager.SchedulerDependentManager):
                 attachment = self.db.volume_attachment_get(context,
                                                            attachment_id)
             except exception.VolumeAttachmentNotFound:
+<<<<<<< HEAD
                 LOG.info(_LI("Volume detach called, but volume not attached."),
                          resource=volume)
+=======
+                LOG.info(_LI("Volume detach called, but volume %(id)s not "
+                             "attached."),
+                         {'id': volume_id})
+>>>>>>> refs/remotes/openstack/stable/kilo
                 # We need to make sure the volume status is set to the correct
                 # status.  It could be in detaching status now, and we don't
                 # want to leave it there.
@@ -1074,8 +1080,14 @@ class VolumeManager(manager.SchedulerDependentManager):
             else:
                 # there aren't any attachments for this volume.
                 # so set the status to available and move on.
+<<<<<<< HEAD
                 LOG.info(_LI("Volume detach called, but volume not attached."),
                          resource=volume)
+=======
+                LOG.info(_LI("Volume detach called, but volume %(id)s not "
+                             "attached."),
+                         {'id': volume_id})
+>>>>>>> refs/remotes/openstack/stable/kilo
                 self.db.volume_update(context, volume_id,
                                       {'status': 'available',
                                        'attach_status': 'detached'})

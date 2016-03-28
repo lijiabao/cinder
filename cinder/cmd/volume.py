@@ -44,7 +44,10 @@ i18n.enable_lazy()
 # Need to register global_opts
 from cinder.common import config  # noqa
 from cinder.db import api as session
+<<<<<<< HEAD
 from cinder.i18n import _
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
 from cinder import service
 from cinder import utils
 from cinder import version
@@ -75,6 +78,7 @@ def main():
             CONF.register_opt(host_opt, group=backend)
             backend_host = getattr(CONF, backend).backend_host
             host = "%s@%s" % (backend_host or CONF.host, backend)
+<<<<<<< HEAD
             try:
                 server = service.Service.create(host=host,
                                                 service_name=backend,
@@ -89,6 +93,16 @@ def main():
                 session.dispose_engine()
                 launcher.launch_service(server)
                 service_started = True
+=======
+            server = service.Service.create(host=host,
+                                            service_name=backend,
+                                            binary='cinder-volume')
+            # Dispose of the whole DB connection pool here before
+            # starting another process.  Otherwise we run into cases where
+            # child processes share DB connections which results in errors.
+            session.dispose_engine()
+            launcher.launch_service(server)
+>>>>>>> refs/remotes/openstack/stable/kilo
     else:
         server = service.Service.create(binary='cinder-volume')
         launcher.launch_service(server)

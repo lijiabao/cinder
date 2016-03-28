@@ -500,6 +500,7 @@ class FeatureState(object):
     def __nonzero__(self):
         """Allow a FeatureState object to be tested for truth value
 
+<<<<<<< HEAD
         :returns: True if the feature is supported, otherwise False
         """
         return self.supported
@@ -566,3 +567,8 @@ class BitSet(object):
 
     def __ne__(self, other):
         return not self.__eq__(other)
+=======
+        :return True if the feature is supported, otherwise False
+        """
+        return self.supported
+>>>>>>> refs/remotes/openstack/stable/kilo

@@ -4475,6 +4475,7 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
                 'name': self.FAKE_HOST
             }]
         }
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
 
         mock_client.getHostVLUNs.side_effect = [
             hpeexceptions.HTTPNotFound('fake'),
@@ -4482,6 +4483,14 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
               'volumeName': self.VOLUME_3PAR_NAME,
               'lun': 90, 'type': 0}]]
 
+=======
+        mock_client.getVLUN.side_effect = [
+            hpexceptions.HTTPNotFound('fake')]
+        mock_client.getHostVLUNs.return_value = [
+            {'active': True,
+             'volumeName': self.VOLUME_3PAR_NAME,
+             'lun': 90, 'type': 0}]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
         location = ("%(volume_name)s,%(lun_id)s,%(host)s,%(nsp)s" %
                     {'volume_name': self.VOLUME_3PAR_NAME,
                      'lun_id': 90,
@@ -4504,7 +4513,11 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
                                           '123456789054321']),
                 mock.call.getHost(self.FAKE_HOST),
                 mock.call.getPorts(),
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
                 mock.call.getHostVLUNs(self.FAKE_HOST),
+=======
+                mock.call.getVLUN(self.VOLUME_3PAR_NAME),
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
                 mock.call.createVLUN(
                     self.VOLUME_3PAR_NAME,
                     auto=True,
@@ -4552,6 +4565,7 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
                 'name': self.FAKE_HOST
             }]
         }
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
 
         mock_client.getHostVLUNs.side_effect = [
             hpeexceptions.HTTPNotFound('fake'),
@@ -4560,6 +4574,14 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
               'lun': 90, 'type': 0,
               'portPos': {'cardPort': 1, 'node': 7, 'slot': 1}, }]]
 
+=======
+        mock_client.getVLUN.side_effect = [
+            hpexceptions.HTTPNotFound('fake')]
+        mock_client.getHostVLUNs.return_value = [
+            {'active': True,
+             'volumeName': self.VOLUME_3PAR_NAME,
+             'lun': 90, 'type': 0}]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
         location = ("%(volume_name)s,%(lun_id)s,%(host)s,%(nsp)s" %
                     {'volume_name': self.VOLUME_3PAR_NAME,
                      'lun_id': 90,
@@ -4596,7 +4618,11 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
                 mock.ANY,
                 mock.call.getHost(self.FAKE_HOST),
                 mock.call.getPorts(),
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
                 mock.call.getHostVLUNs(self.FAKE_HOST),
+=======
+                mock.call.getVLUN(self.VOLUME_3PAR_NAME),
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
                 mock.call.getPorts(),
                 mock.call.createVLUN(
                     self.VOLUME_3PAR_NAME,
@@ -4643,6 +4669,7 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
                 'name': self.FAKE_HOST
             }]
         }
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
 
         mock_client.getHostVLUNs.side_effect = [
             hpeexceptions.HTTPNotFound('fake'),
@@ -4650,6 +4677,14 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
               'volumeName': self.VOLUME_3PAR_NAME,
               'lun': 90, 'type': 0}]]
 
+=======
+        mock_client.getVLUN.side_effect = [
+            hpexceptions.HTTPNotFound('fake')]
+        mock_client.getHostVLUNs.return_value = [
+            {'active': True,
+             'volumeName': self.VOLUME_3PAR_NAME,
+             'lun': 90, 'type': 0}]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
         location = ("%(volume_name)s,%(lun_id)s,%(host)s,%(nsp)s" %
                     {'volume_name': self.VOLUME_3PAR_NAME,
                      'lun_id': 90,
@@ -4672,7 +4707,11 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
                                           '123456789054321']),
                 mock.call.getHost(self.FAKE_HOST),
                 mock.call.getPorts(),
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
                 mock.call.getHostVLUNs(self.FAKE_HOST),
+=======
+                mock.call.getVLUN(self.VOLUME_3PAR_NAME),
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
                 mock.call.createVLUN(
                     self.VOLUME_3PAR_NAME,
                     auto=True,
@@ -4697,8 +4736,13 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
         effects = [
             [{'active': True, 'volumeName': self.VOLUME_3PAR_NAME,
               'lun': None, 'type': 0}],
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
             hpeexceptions.HTTPNotFound,
             hpeexceptions.HTTPNotFound]
+=======
+            hpexceptions.HTTPNotFound,
+            hpexceptions.HTTPNotFound]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
 
         mock_client.getHostVLUNs.side_effect = effects
 
@@ -4778,8 +4822,13 @@ class TestHPE3PARFCDriver(HPE3PARBaseDriver, test.TestCase):
         effects = [
             [{'active': True, 'volumeName': self.VOLUME_3PAR_NAME,
               'lun': None, 'type': 0}],
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
             hpeexceptions.HTTPNotFound,
             hpeexceptions.HTTPNotFound]
+=======
+            hpexceptions.HTTPNotFound,
+            hpexceptions.HTTPNotFound]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
 
         mock_client.queryHost.return_value = {
             'members': [{
@@ -5464,6 +5513,7 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
                 'name': self.FAKE_HOST
             }]
         }
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
 
         mock_client.getHostVLUNs.side_effect = [
             [{'hostname': self.FAKE_HOST,
@@ -5474,6 +5524,16 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
               'volumeName': self.VOLUME_3PAR_NAME,
               'lun': self.TARGET_LUN, 'type': 0}]]
 
+=======
+        mock_client.getHostVLUNs.return_value = [
+            {'active': True,
+             'volumeName': self.VOLUME_3PAR_NAME,
+             'lun': self.TARGET_LUN, 'type': 0}]
+        mock_client.getVLUN.return_value = {
+            'hostname': self.FAKE_HOST,
+            'lun': self.TARGET_LUN,
+            'portPos': {'node': 8, 'slot': 1, 'cardPort': 1}}
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
         location = ("%(volume_name)s,%(lun_id)s,%(host)s,%(nsp)s" %
                     {'volume_name': self.VOLUME_3PAR_NAME,
                      'lun_id': self.TARGET_LUN,
@@ -5550,6 +5610,7 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
                 mock.call.getHost(self.FAKE_HOST),
                 mock.call.queryHost(iqns=['iqn.1993-08.org.debian:01:222']),
                 mock.call.getHost(self.FAKE_HOST),
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
                 mock.call.getiSCSIPorts(
                     state=self.mock_client_conf['PORT_STATE_READY']),
                 mock.call.getHostVLUNs(self.FAKE_HOST),
@@ -5613,6 +5674,9 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
                 mock.call.getiSCSIPorts(
                     state=self.mock_client_conf['PORT_STATE_READY']),
                 mock.call.getHostVLUNs(self.FAKE_HOST)]
+=======
+                mock.call.getVLUN(self.VOLUME_3PAR_NAME)]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
 
             mock_client.assert_has_calls(
                 self.standard_login +
@@ -5635,6 +5699,7 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
                 'name': self.FAKE_HOST
             }]
         }
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
 
         mock_client.getHostVLUNs.side_effect = [
             [{'hostname': self.FAKE_HOST,
@@ -5645,6 +5710,16 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
               'volumeName': self.VOLUME_3PAR_NAME,
               'lun': self.TARGET_LUN, 'type': 0}]]
 
+=======
+        mock_client.getHostVLUNs.return_value = [
+            {'active': True,
+             'volumeName': self.VOLUME_3PAR_NAME,
+             'lun': self.TARGET_LUN, 'type': 0}]
+        mock_client.getVLUN.return_value = {
+            'hostname': self.FAKE_HOST,
+            'lun': self.TARGET_LUN,
+            'portPos': {'node': 8, 'slot': 1, 'cardPort': 1}}
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
         location = ("%(volume_name)s,%(lun_id)s,%(host)s,%(nsp)s" %
                     {'volume_name': self.VOLUME_3PAR_NAME,
                      'lun_id': self.TARGET_LUN,
@@ -5665,7 +5740,11 @@ class TestHPE3PARISCSIDriver(HPE3PARBaseDriver, test.TestCase):
                 mock.call.getHost(self.FAKE_HOST),
                 mock.call.queryHost(iqns=['iqn.1993-08.org.debian:01:222']),
                 mock.call.getHost(self.FAKE_HOST),
+<<<<<<< HEAD:cinder/tests/unit/test_hpe3par.py
                 mock.call.getHostVLUNs(self.FAKE_HOST)]
+=======
+                mock.call.getVLUN(self.VOLUME_3PAR_NAME)]
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_hp3par.py
 
             mock_client.assert_has_calls(
                 self.standard_login +

@@ -451,7 +451,11 @@ class TestUploadVolume(test.TestCase):
                                              mock.sentinel.disk_format,
                                              run_as_root=True)
         mock_info.assert_called_with(temp_file, run_as_root=True)
+<<<<<<< HEAD:cinder/tests/unit/test_image_utils.py
         self.assertEqual(2, mock_info.call_count)
+=======
+        self.assertEqual(mock_info.call_count, 2)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_image_utils.py
         mock_open.assert_called_once_with(temp_file, 'rb')
         image_service.update.assert_called_once_with(
             ctxt, image_meta['id'], {},
@@ -541,7 +545,11 @@ class TestUploadVolume(test.TestCase):
                                              mock.sentinel.disk_format,
                                              run_as_root=True)
         mock_info.assert_called_with(temp_file, run_as_root=True)
+<<<<<<< HEAD:cinder/tests/unit/test_image_utils.py
         self.assertEqual(2, mock_info.call_count)
+=======
+        self.assertEqual(mock_info.call_count, 2)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_image_utils.py
         self.assertFalse(image_service.update.called)
 
 

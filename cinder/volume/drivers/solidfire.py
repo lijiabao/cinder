@@ -75,10 +75,15 @@ sf_opts = [
                      'glance and qemu-conversion on subsequent calls.'),
 
     cfg.StrOpt('sf_svip',
+<<<<<<< HEAD
+=======
+               default=None,
+>>>>>>> refs/remotes/openstack/stable/kilo
                help='Overrides default cluster SVIP with the one specified. '
                     'This is required or deployments that have implemented '
                     'the use of VLANs for iSCSI networks in their cloud.'),
 
+<<<<<<< HEAD
     cfg.BoolOpt('sf_enable_volume_mapping',
                 default=True,
                 help='Create an internal mapping of volume IDs and account.  '
@@ -90,6 +95,13 @@ sf_opts = [
                 default=443,
                 help='SolidFire API port. Useful if the device api is behind '
                      'a proxy on a different port.'),
+=======
+
+    cfg.IntOpt('sf_api_port',
+               default=443,
+               help='SolidFire API port. Useful if the device api is behind '
+                    'a proxy on a different port.'), ]
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     cfg.BoolOpt('sf_enable_vag',
                 default=False,
@@ -262,12 +274,23 @@ class SolidFireDriver(san.SanISCSIDriver):
         return (volume_updates, snapshot_updates)
 
     def _create_template_account(self, account_name):
+<<<<<<< HEAD
         # We raise an API exception if the account doesn't exist
 
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
         # We need to take account_prefix settings into consideration
         # This just uses the same method to do template account create
         # as we use for any other OpenStack account
         account_name = self._get_sf_account_name(account_name)
+<<<<<<< HEAD
+=======
+        chap_secret = self._generate_random_string(12)
+        params = {'username': account_name,
+                  'initiatorSecret': chap_secret,
+                  'targetSecret': chap_secret,
+                  'attributes': {}}
+>>>>>>> refs/remotes/openstack/stable/kilo
         try:
             id = self._issue_api_request(
                 'GetAccountByName',

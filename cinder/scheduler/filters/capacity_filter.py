@@ -86,7 +86,7 @@ class CapacityFilter(filters.BaseHostFilter):
         # provisioned capacity over total capacity has exceeded over
         # subscription ratio.
         if (host_state.thin_provisioning_support and
-                host_state.max_over_subscription_ratio >= 1):
+                host_state.max_over_subscription_ratio > 1):
             provisioned_ratio = ((host_state.provisioned_capacity_gb +
                                   volume_size) / total)
             if provisioned_ratio > host_state.max_over_subscription_ratio:
@@ -130,4 +130,17 @@ class CapacityFilter(filters.BaseHostFilter):
                   "on host %(host)s (requested / avail): "
                   "%(requested)s/%(available)s", msg_args)
 
+<<<<<<< HEAD
+=======
+        if free < volume_size:
+            LOG.warning(_LW("Insufficient free space for volume creation "
+                            "on host %(host)s (requested / avail): "
+                            "%(requested)s/%(available)s"), msg_args)
+            return False
+
+        LOG.debug("Space information for volume creation "
+                  "on host %(host)s (requested / avail): "
+                  "%(requested)s/%(available)s", msg_args)
+
+>>>>>>> refs/remotes/openstack/stable/kilo
         return True

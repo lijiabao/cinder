@@ -156,7 +156,11 @@ class BackupNFSSwiftBasedTestCase(test.TestCase):
                          mock.Mock(return_value=mock_remotefsclient))
         # Remove tempdir.
         self.addCleanup(shutil.rmtree, self.temp_dir)
+<<<<<<< HEAD:cinder/tests/unit/backup/drivers/test_backup_nfs.py
         for _i in range(0, 32):
+=======
+        for _i in xrange(0, 32):
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/backup/drivers/test_backup_nfs.py
             self.volume_file.write(os.urandom(1024))
 
     def test_backup_uncompressed(self):

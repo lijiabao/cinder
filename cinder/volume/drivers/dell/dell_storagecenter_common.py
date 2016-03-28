@@ -600,24 +600,37 @@ class DellCommonDriver(driver.ConsistencyGroupVD, driver.ManageableVD,
                 data['replication_targets'] = replication_targets
 
             self._stats = data
+<<<<<<< HEAD
             LOG.debug('Total cap %(total)s Free cap %(free)s',
                       {'total': data['total_capacity_gb'],
                        'free': data['free_capacity_gb']})
 
     def update_migrated_volume(self, ctxt, volume, new_volume,
                                original_volume_status):
+=======
+            LOG.debug('Total cap %(t)s Free cap %(f)s',
+                      {'t': totalcapacitygb,
+                       'f': freespacegb})
+
+    def update_migrated_volume(self, ctxt, volume, new_volume):
+>>>>>>> refs/remotes/openstack/stable/kilo
         """Return model update for migrated volume.
 
         :param volume: The original volume that was migrated to this backend
         :param new_volume: The migration volume object that was created on
                            this backend as part of the migration process
+<<<<<<< HEAD
         :param original_volume_status: The status of the original volume
         :returns: model_update to update DB with any needed changes
+=======
+        :return model_update to update DB with any needed changes
+>>>>>>> refs/remotes/openstack/stable/kilo
         """
         # We use id as our volume name so we need to rename the backend
         # volume to the original volume name.
         original_volume_name = volume.get('id')
         current_name = new_volume.get('id')
+<<<<<<< HEAD
         LOG.debug('update_migrated_volume: %(current)s to %(original)s',
                   {'current': current_name,
                    'original': original_volume_name})
@@ -1215,3 +1228,22 @@ class DellCommonDriver(driver.ConsistencyGroupVD, driver.ManageableVD,
             # Free our snapshot.
             api.unmanage_replay(screplay)
             # Do not check our result.
+=======
+        LOG.debug('update_migrated_volume: %(c)s to %(o)s',
+                  {'c': current_name,
+                   'o': original_volume_name})
+        if original_volume_name:
+            with self._client.open_connection() as api:
+                ssn = api.find_sc(self.configuration.dell_sc_ssn)
+                if ssn is not None:
+                    scvolume = api.find_volume(ssn,
+                                               current_name)
+                    if scvolume:
+                        if api.rename_volume(scvolume, original_volume_name):
+                            model_update = {'_name_id': None}
+                            return model_update
+        # The world was horrible to us so we should error and leave.
+        LOG.error(_LE('Unabled to rename the logical volume for volume: %s'),
+                  original_volume_name)
+        return None
+>>>>>>> refs/remotes/openstack/stable/kilo

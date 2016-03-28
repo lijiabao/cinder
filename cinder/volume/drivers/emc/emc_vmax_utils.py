@@ -1738,6 +1738,7 @@ class EMCVMAXUtils(object):
             if 'iqn' in initiator.lower():
                 hardwareTypeId = 5
         if hardwareTypeId == 0:
+<<<<<<< HEAD
             LOG.warning(_LW("Cannot determine the hardware type."))
         return hardwareTypeId
 
@@ -2566,3 +2567,7 @@ class EMCVMAXUtils(object):
         sgInstanceName = self.find_storage_masking_group(
             conn, controllerConfigService, storageGroupName)
         return storageGroupName, controllerConfigService, sgInstanceName
+=======
+            LOG.warn(_LW("Cannot determine the hardware type."))
+        return hardwareTypeId
+>>>>>>> refs/remotes/openstack/stable/kilo

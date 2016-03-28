@@ -940,6 +940,16 @@ def get_flow(context, manager, db, driver, scheduler_rpcapi, host, volume_id,
                                             scheduler_rpcapi,
                                             do_reschedule))
 
+<<<<<<< HEAD
+    LOG.debug("Volume reschedule parameters: %(allow)s "
+              "retry: %(retry)s", {'allow': allow_reschedule, 'retry': retry})
+=======
+    retry = filter_properties.get('retry', None)
+    if allow_reschedule and request_spec and retry:
+        volume_flow.add(OnFailureRescheduleTask(reschedule_context,
+                                                db, scheduler_rpcapi))
+>>>>>>> refs/remotes/openstack/stable/kilo
+
     LOG.debug("Volume reschedule parameters: %(allow)s "
               "retry: %(retry)s", {'allow': allow_reschedule, 'retry': retry})
 

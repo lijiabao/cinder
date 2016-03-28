@@ -255,6 +255,7 @@ class DateraDriver(san.SanISCSIDriver):
 
     def ensure_export(self, context, volume, connector):
         """Gets the associated account, retrieves CHAP info and updates."""
+<<<<<<< HEAD
         return self.create_export(context, volume, connector)
 
     def create_export(self, context, volume, connector):
@@ -265,6 +266,33 @@ class DateraDriver(san.SanISCSIDriver):
         app_inst = self._issue_api_request(url, method='put', body=data)
         storage_instance = app_inst['storage_instances'][
             DEFAULT_STORAGE_NAME]
+=======
+        portal = None
+        iqn = None
+        datera_volume = self._issue_api_request('volumes',
+                                                resource=volume['id'])
+        if len(datera_volume['targets']) == 0:
+            export = self._issue_api_request(
+                'volumes', action='export', method='post',
+                body={'ctype': 'TC_BLOCK_ISCSI'}, resource=volume['id'])
+
+            portal = "%s:3260" % export['_ipColl'][0]
+
+            # NOTE(thingee): Refer to the Datera test for a stub of what this
+            # looks like. We're just going to pull the first IP that the Datera
+            # cluster makes available for the portal.
+            iqn = export['targetIds'].itervalues().next()['ids'][0]['id']
+        else:
+            export = self._issue_api_request(
+                'export_configs',
+                resource=datera_volume['targets'][0]
+            )
+            portal = export['endpoint_addrs'][0] + ':3260'
+            iqn = export['endpoint_idents'][0]
+
+        provider_location = '%s %s %s' % (portal, iqn, 0)
+        return {'provider_location': provider_location}
+>>>>>>> refs/remotes/openstack/stable/kilo
 
         portal = storage_instance['access']['ips'][0] + ':3260'
         iqn = storage_instance['access']['iqn']

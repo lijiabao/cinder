@@ -1,7 +1,13 @@
+<<<<<<< HEAD:cinder/tests/unit/volume/drivers/netapp/dataontap/client/test_client_cmode.py
 # Copyright (c) 2014 Alex Meade.  All rights reserved.
 # Copyright (c) 2015 Dustin Schoenbrun. All rights reserved.
 # Copyright (c) 2015 Tom Barron.  All rights reserved.
 # Copyright (c) 2016 Mike Rooney. All rights reserved.
+=======
+# Copyright (c) 2014 Alex Meade.
+# Copyright (c) 2015 Dustin Schoenbrun.
+# All rights reserved.
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/volume/drivers/netapp/dataontap/client/test_client_cmode.py
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
 #    not use this file except in compliance with the License. You may obtain
@@ -940,7 +946,11 @@ class NetAppCmodeClientTestCase(test.TestCase):
         expected_total_size = 1000
         expected_available_size = 750
         fake_flexvol_path = '/fake/vol'
+<<<<<<< HEAD:cinder/tests/unit/volume/drivers/netapp/dataontap/client/test_client_cmode.py
         api_response = netapp_api.NaElement(
+=======
+        response = netapp_api.NaElement(
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/volume/drivers/netapp/dataontap/client/test_client_cmode.py
             etree.XML("""
             <results status="passed">
                 <attributes-list>
@@ -953,14 +963,19 @@ class NetAppCmodeClientTestCase(test.TestCase):
                 </attributes-list>
             </results>""" % {'available_size': expected_available_size,
                              'total_size': expected_total_size}))
+<<<<<<< HEAD:cinder/tests/unit/volume/drivers/netapp/dataontap/client/test_client_cmode.py
 
         self.mock_send_request.return_value = api_response
+=======
+        self.connection.invoke_successfully.return_value = response
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/volume/drivers/netapp/dataontap/client/test_client_cmode.py
 
         total_size, available_size = (
             self.client.get_flexvol_capacity(fake_flexvol_path))
 
         self.assertEqual(expected_total_size, total_size)
         self.assertEqual(expected_available_size, available_size)
+<<<<<<< HEAD:cinder/tests/unit/volume/drivers/netapp/dataontap/client/test_client_cmode.py
 
     def test_get_aggregates(self):
 
@@ -1286,3 +1301,5 @@ class NetAppCmodeClientTestCase(test.TestCase):
 
         self.assertRaises(exception.SnapshotNotFound, self.client.get_snapshot,
                           expected_vol_name, expected_snapshot_name)
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/volume/drivers/netapp/dataontap/client/test_client_cmode.py

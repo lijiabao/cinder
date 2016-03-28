@@ -2009,6 +2009,7 @@ class VolumeDriver(ConsistencyGroupVD, TransferVD, ManageableVD, ExtendVD,
 
     def unmanage(self, volume):
         pass
+<<<<<<< HEAD
 
     def manage_existing_snapshot(self, snapshot, existing_ref):
         msg = _("Manage existing snapshot not implemented.")
@@ -2017,6 +2018,8 @@ class VolumeDriver(ConsistencyGroupVD, TransferVD, ManageableVD, ExtendVD,
     def manage_existing_snapshot_get_size(self, snapshot, existing_ref):
         msg = _("Manage existing snapshot not implemented.")
         raise NotImplementedError(msg)
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def unmanage_snapshot(self, snapshot):
         """Unmanage the specified snapshot from Cinder management."""

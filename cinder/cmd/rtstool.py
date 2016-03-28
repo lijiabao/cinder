@@ -88,9 +88,15 @@ def create(backing_device, name, userid, password, iser_enabled,
 
     for ip in portals_ips:
         try:
+<<<<<<< HEAD
             portal = rtslib_fb.NetworkPortal(tpg_new, ip, portals_port,
                                              mode='any')
         except rtslib_fb.utils.RTSLibError:
+=======
+            portal = rtslib.NetworkPortal(tpg_new, ip, portals_port,
+                                          mode='any')
+        except rtslib.utils.RTSLibError:
+>>>>>>> refs/remotes/openstack/stable/kilo
             raise_exc = ip not in ips_allow_fail
             msg_type = 'Error' if raise_exc else 'Warning'
             print(_('%(msg_type)s: creating NetworkPortal: ensure port '
@@ -102,7 +108,11 @@ def create(backing_device, name, userid, password, iser_enabled,
             try:
                 if iser_enabled == 'True':
                     portal.iser = True
+<<<<<<< HEAD
             except rtslib_fb.utils.RTSLibError:
+=======
+            except rtslib.utils.RTSLibError:
+>>>>>>> refs/remotes/openstack/stable/kilo
                 print(_('Error enabling iSER for NetworkPortal: please ensure '
                         'that RDMA is supported on your iSCSI port %(port)d '
                         'on ip %(ip)s.') % {'port': portals_port, 'ip': ip})
@@ -245,6 +255,25 @@ def parse_optional_create(argv):
     for arg in argv:
         if arg.startswith('-a'):
             ips = [ip for ip in arg[2:].split(',') if ip]
+            if not ips:
+                usage()
+            optional_args['portals_ips'] = ips
+        elif arg.startswith('-p'):
+            try:
+                optional_args['portals_port'] = int(arg[2:])
+            except ValueError:
+                usage()
+        else:
+            optional_args['initiator_iqns'] = arg
+    return optional_args
+
+
+def parse_optional_create(argv):
+    optional_args = {}
+
+    for arg in argv:
+        if arg.startswith('-a'):
+            ips = filter(None, arg[2:].split(','))
             if not ips:
                 usage()
             optional_args['portals_ips'] = ips

@@ -98,7 +98,12 @@ ERR_MSG_ALREADY_ALLOWED = "already allowed on"
 ERR_MSG_NOT_CONNECTED = "is not connected"
 ERR_MSG_ALREADY_BELONGS = "already belongs to"
 
+<<<<<<< HEAD
 EXTRA_SPECS_REPL_ENABLED = "replication_enabled"
+=======
+CONNECT_LOCK_NAME = 'PureVolumeDriver_connect'
+
+>>>>>>> refs/remotes/openstack/stable/kilo
 
 CONNECT_LOCK_NAME = 'PureVolumeDriver_connect'
 
@@ -411,9 +416,80 @@ class PureBaseVolumeDriver(san.SanDriver):
     def initialize_connection(self, volume, connector, initiator_data=None):
         """Connect the volume to the specified initiator in Purity.
 
+<<<<<<< HEAD
         This implementation is specific to the host type (iSCSI, FC, etc).
         """
         raise NotImplementedError
+=======
+        initiator_update = connection.get("initiator_update", False)
+        if initiator_update:
+            properties["initiator_update"] = initiator_update
+
+        LOG.debug("Leave PureISCSIDriver.initialize_connection.")
+        return properties
+
+    def _get_target_iscsi_port(self):
+        """Return dictionary describing iSCSI-enabled port on target array."""
+        try:
+            self._run_iscsiadm_bare(["-m", "discovery", "-t", "sendtargets",
+                                     "-p", self._iscsi_port["portal"]])
+        except processutils.ProcessExecutionError as err:
+            LOG.warn(_LW("iSCSI discovery of port %(port_name)s at "
+                         "%(port_portal)s failed with error: %(err_msg)s"),
+                     {"port_name": self._iscsi_port["name"],
+                      "port_portal": self._iscsi_port["portal"],
+                      "err_msg": err.stderr})
+            self._iscsi_port = self._choose_target_iscsi_port()
+        return self._iscsi_port
+
+    @utils.retry(exception.PureDriverException, retries=3)
+    def _choose_target_iscsi_port(self):
+        """Find a reachable iSCSI-enabled port on target array."""
+        ports = self._array.list_ports()
+        iscsi_ports = [port for port in ports if port["iqn"]]
+        for port in iscsi_ports:
+            try:
+                self._run_iscsiadm_bare(["-m", "discovery",
+                                         "-t", "sendtargets",
+                                         "-p", port["portal"]])
+            except processutils.ProcessExecutionError as err:
+                LOG.debug(("iSCSI discovery of port %(port_name)s at "
+                           "%(port_portal)s failed with error: %(err_msg)s"),
+                          {"port_name": port["name"],
+                           "port_portal": port["portal"],
+                           "err_msg": err.stderr})
+            else:
+                LOG.info(_LI("Using port %(name)s on the array at %(portal)s "
+                             "for iSCSI connectivity."),
+                         {"name": port["name"], "portal": port["portal"]})
+                return port
+        raise exception.PureDriverException(
+            reason=_("No reachable iSCSI-enabled ports on target array."))
+
+    def _get_chap_credentials(self, host, data):
+        initiator_updates = None
+        username = host
+        password = None
+        if data:
+            for d in data:
+                if d["key"] == CHAP_SECRET_KEY:
+                    password = d["value"]
+                    break
+        if not password:
+            password = _generate_chap_secret()
+            initiator_updates = {
+                "set_values": {
+                    CHAP_SECRET_KEY: password
+                }
+            }
+        return username, password, initiator_updates
+
+    @utils.synchronized(CONNECT_LOCK_NAME, external=True)
+    def _connect(self, volume, connector, initiator_data):
+        """Connect the host and volume; return dict describing connection."""
+        connection = None
+        iqn = connector["initiator"]
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def _get_host(self, array, connector):
         """Get a Purity Host that corresponds to the host in the connector.
@@ -436,7 +512,11 @@ class PureBaseVolumeDriver(san.SanDriver):
 
         return result
 
+<<<<<<< HEAD
     @pure_driver_debug_trace
+=======
+    @utils.synchronized(CONNECT_LOCK_NAME, external=True)
+>>>>>>> refs/remotes/openstack/stable/kilo
     def terminate_connection(self, volume, connector, **kwargs):
         """Terminate connection."""
         # Get current array in case we have failed over via replication.
@@ -455,6 +535,7 @@ class PureBaseVolumeDriver(san.SanDriver):
                     ctxt.reraise = False
                     LOG.error(_LE("Disconnection failed with message: "
                                   "%(msg)s."), {"msg": err.text})
+<<<<<<< HEAD
         if (GENERATED_NAME.match(host_name) and
                 not array.list_host_connections(host_name, private=True)):
             LOG.info(_LI("Deleting unneeded host %(host_name)r."),
@@ -474,6 +555,25 @@ class PureBaseVolumeDriver(san.SanDriver):
         return False
 
     @pure_driver_debug_trace
+=======
+        try:
+            if (GENERATED_NAME.match(host_name) and
+                not self._array.list_host_connections(host_name,
+                                                      private=True)):
+                LOG.info(_LI("Deleting unneeded host %(host_name)r."),
+                         {"host_name": host_name})
+                self._array.delete_host(host_name)
+        except purestorage.PureHTTPError as err:
+            with excutils.save_and_reraise_exception() as ctxt:
+                if err.code == 400 and ERR_MSG_NOT_EXIST in err.text:
+                    # Happens if the host is already deleted.
+                    # This is fine though, just treat it as a warning.
+                    ctxt.reraise = False
+                    LOG.warning(_LW("Purity host deletion failed: "
+                                    "%(msg)s."), {"msg": err.text})
+        LOG.debug("Leave PureISCSIDriver._disconnect_host.")
+
+>>>>>>> refs/remotes/openstack/stable/kilo
     def get_volume_stats(self, refresh=False):
         """Return the current state of the volume service.
 

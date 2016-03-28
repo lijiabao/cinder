@@ -592,7 +592,11 @@ class LVM(executor.Executor):
             LOG.error(_LE('StdErr  :%s'), err.stderr)
             raise
 
+<<<<<<< HEAD
     def activate_lv(self, name, is_snapshot=False, permanent=False):
+=======
+    def activate_lv(self, name, is_snapshot=False):
+>>>>>>> refs/remotes/openstack/stable/kilo
         """Ensure that logical volume/snapshot logical volume is activated.
 
         :param name: Name of LV to activate

@@ -110,7 +110,11 @@ class BackupSwiftTestCase(test.TestCase):
         self.addCleanup(self.volume_file.close)
         # Remove tempdir.
         self.addCleanup(shutil.rmtree, self.temp_dir)
+<<<<<<< HEAD:cinder/tests/unit/test_backup_swift.py
         for _i in range(0, 64):
+=======
+        for _i in xrange(0, 64):
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_backup_swift.py
             self.volume_file.write(os.urandom(1024))
 
         notify_patcher = mock.patch(

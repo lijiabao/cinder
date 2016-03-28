@@ -75,6 +75,7 @@ def _loc_info(loc):
 def _xml_read(root, element, check=None):
     """Read an xml element."""
 
+<<<<<<< HEAD:cinder/volume/drivers/hitachi/hnas_iscsi.py
     val = root.findtext(element)
 
     # mandatory parameter not found
@@ -83,6 +84,17 @@ def _xml_read(root, element, check=None):
 
     # tag not found
     if val is None:
+=======
+    try:
+        val = root.findtext(element)
+        LOG.info(_LI("%(element)s: %(val)s"),
+                 {'element': element,
+                  'val': val if element != 'password' else '***'})
+        if val:
+            return val.strip()
+        if check:
+            raise exception.ParameterNotFound(param=element)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/hds/iscsi.py
         return None
 
     svc_tag_pattern = re.compile("svc_[0-3]$")

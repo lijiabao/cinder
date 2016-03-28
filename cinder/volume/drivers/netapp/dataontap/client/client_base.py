@@ -61,6 +61,10 @@ class Client(object):
         """Set up the repository of available Data ONTAP features."""
         self.features = na_utils.Features()
 
+    def _init_features(self):
+        """Set up the repository of available Data ONTAP features."""
+        self.features = na_utils.Features()
+
     def get_ontapi_version(self, cached=True):
         """Gets the supported ontapi version."""
 

@@ -86,6 +86,7 @@ class HPE3PARFCDriver(driver.TransferVD,
         2.0.15 - Added support for updated detach_volume attachment.
         2.0.16 - Added encrypted property to initialize_connection #1439917
         2.0.17 - Improved VLUN creation and deletion logic. #1469816
+<<<<<<< HEAD:cinder/volume/drivers/hpe/hpe_3par_fc.py
         2.0.18 - Changed initialize_connection to use getHostVLUNs. #1475064
         2.0.19 - Adds consistency group support
         2.0.20 - Update driver to use ABC metaclasses
@@ -101,6 +102,12 @@ class HPE3PARFCDriver(driver.TransferVD,
     """
 
     VERSION = "3.0.6"
+=======
+
+    """
+
+    VERSION = "2.0.17"
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/san/hp/hp_3par_fc.py
 
     def __init__(self, *args, **kwargs):
         super(HPE3PARFCDriver, self).__init__(*args, **kwargs)
@@ -266,10 +273,23 @@ class HPE3PARFCDriver(driver.TransferVD,
                 self._build_initiator_target_map(common, connector)
 
             # check if a VLUN already exists for this host
+<<<<<<< HEAD:cinder/volume/drivers/hpe/hpe_3par_fc.py
             existing_vlun = common.find_existing_vlun(volume, host)
 
             vlun = None
             if existing_vlun is None:
+=======
+            existing_vlun = None
+            try:
+                vol_name = common._get_3par_vol_name(volume['id'])
+                existing_vlun = common.client.getVLUN(vol_name)
+            except hpexceptions.HTTPNotFound:
+                # ignore, vlun will be created later
+                pass
+
+            vlun = None
+            if not existing_vlun or host['name'] != existing_vlun['hostname']:
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/san/hp/hp_3par_fc.py
                 # now that we have a host, create the VLUN
                 if self.lookup_service is not None and numPaths == 1:
                     nsp = None

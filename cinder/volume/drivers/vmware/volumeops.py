@@ -1104,8 +1104,12 @@ class VMwareVolumeOps(object):
         return self._get_parent(backing, 'Folder')
 
     def _get_clone_spec(self, datastore, disk_move_type, snapshot, backing,
+<<<<<<< HEAD
                         disk_type, host=None, resource_pool=None,
                         extra_config=None):
+=======
+                        disk_type, host=None, resource_pool=None):
+>>>>>>> refs/remotes/openstack/stable/kilo
         """Get the clone spec.
 
         :param datastore: Reference to datastore
@@ -1115,8 +1119,11 @@ class VMwareVolumeOps(object):
         :param disk_type: Disk type of clone
         :param host: Target host
         :param resource_pool: Target resource pool
+<<<<<<< HEAD
         :param extra_config: Key-value pairs to be written to backing's
                              extra-config
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
         :return: Clone spec
         """
         if disk_type is not None:
@@ -1144,8 +1151,12 @@ class VMwareVolumeOps(object):
         return clone_spec
 
     def clone_backing(self, name, backing, snapshot, clone_type, datastore,
+<<<<<<< HEAD
                       disk_type=None, host=None, resource_pool=None,
                       extra_config=None, folder=None):
+=======
+                      disk_type=None, host=None, resource_pool=None):
+>>>>>>> refs/remotes/openstack/stable/kilo
         """Clone backing.
 
         If the clone_type is 'full', then a full clone of the source volume
@@ -1160,9 +1171,12 @@ class VMwareVolumeOps(object):
         :param disk_type: Disk type of the clone
         :param host: Target host
         :param resource_pool: Target resource pool
+<<<<<<< HEAD
         :param extra_config: Key-value pairs to be written to backing's
                              extra-config
         :param folder: The location of the clone
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
         """
         LOG.debug("Creating a clone of backing: %(back)s, named: %(name)s, "
                   "clone type: %(type)s from snapshot: %(snap)s on "
@@ -1171,18 +1185,28 @@ class VMwareVolumeOps(object):
                   {'back': backing, 'name': name, 'type': clone_type,
                    'snap': snapshot, 'ds': datastore, 'disk_type': disk_type,
                    'host': host, 'resource_pool': resource_pool})
+<<<<<<< HEAD
 
         if folder is None:
             # Use source folder as the location of the clone.
             folder = self._get_folder(backing)
 
+=======
+        folder = self._get_folder(backing)
+>>>>>>> refs/remotes/openstack/stable/kilo
         if clone_type == LINKED_CLONE_TYPE:
             disk_move_type = 'createNewChildDiskBacking'
         else:
             disk_move_type = 'moveAllDiskBackingsAndDisallowSharing'
+<<<<<<< HEAD
         clone_spec = self._get_clone_spec(
             datastore, disk_move_type, snapshot, backing, disk_type, host=host,
             resource_pool=resource_pool, extra_config=extra_config)
+=======
+        clone_spec = self._get_clone_spec(datastore, disk_move_type, snapshot,
+                                          backing, disk_type, host,
+                                          resource_pool)
+>>>>>>> refs/remotes/openstack/stable/kilo
         task = self._session.invoke_api(self._session.vim, 'CloneVM_Task',
                                         backing, folder=folder, name=name,
                                         spec=clone_spec)

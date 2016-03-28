@@ -60,12 +60,24 @@ def _xml_read(root, element, check=None):
 
     val = root.findtext(element)
 
+<<<<<<< HEAD:cinder/volume/drivers/hitachi/hnas_nfs.py
     # mandatory parameter not found
     if val is None and check:
         raise exception.ParameterNotFound(param=element)
 
     # tag not found
     if val is None:
+=======
+    try:
+        val = root.findtext(element)
+        LOG.info(_LI("%(element)s: %(val)s"),
+                 {'element': element,
+                  'val': val if element != 'password' else '***'})
+        if val:
+            return val.strip()
+        if check:
+            raise exception.ParameterNotFound(param=element)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/hds/nfs.py
         return None
 
     svc_tag_pattern = re.compile("svc_.$")

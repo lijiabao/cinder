@@ -484,6 +484,30 @@ class VolumeTestCase(BaseVolumeTestCase):
         self.volume.driver._initialized = False
         self.assertFalse(self.volume.is_working())
 
+    @mock.patch.object(vol_manager.VolumeManager,
+                       'update_service_capabilities')
+    def test_report_filter_goodness_function(self, mock_update):
+        manager = vol_manager.VolumeManager()
+        manager.driver.set_initialized()
+        myfilterfunction = "myFilterFunction"
+        mygoodnessfunction = "myGoodnessFunction"
+        expected = {'name': 'cinder-volumes',
+                    'filter_function': myfilterfunction,
+                    'goodness_function': mygoodnessfunction,
+                    }
+        with mock.patch.object(manager.driver,
+                               'get_volume_stats') as m_get_stats:
+            with mock.patch.object(manager.driver,
+                                   'get_goodness_function') as m_get_goodness:
+                with mock.patch.object(manager.driver,
+                                       'get_filter_function') as m_get_filter:
+                    m_get_stats.return_value = {'name': 'cinder-volumes'}
+                    m_get_filter.return_value = myfilterfunction
+                    m_get_goodness.return_value = mygoodnessfunction
+                    manager._report_driver_status(1)
+                    self.assertTrue(m_get_stats.called)
+                    mock_update.assert_called_once_with(expected)
+
     def test_create_volume_fails_with_creating_and_downloading_status(self):
         """Test init_host in case of volume.
 
@@ -2497,7 +2521,11 @@ class VolumeTestCase(BaseVolumeTestCase):
                                                 mountpoint2, 'ro')
         vol = db.volume_get(context.get_admin_context(), volume_id)
         self.assertEqual('in-use', vol['status'])
+<<<<<<< HEAD:cinder/tests/unit/test_volume.py
         self.assertTrue(vol['multiattach'])
+=======
+        self.assertEqual(True, vol['multiattach'])
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_volume.py
         self.assertIsNone(attachment2)
 
         self.assertRaises(exception.VolumeAttached,
@@ -7171,7 +7199,13 @@ class LVMVolumeDriverTestCase(DriverTestCase):
                 mock.patch.object(volutils, 'copy_volume') as mock_copy, \
                 mock.patch.object(volutils, 'get_all_volume_groups',
                                   side_effect = get_all_volume_groups), \
+<<<<<<< HEAD:cinder/tests/unit/test_volume.py
                 mock.patch.object(self.volume.driver, '_delete_volume'):
+=======
+                mock.patch.object(self.volume.driver, '_delete_volume'), \
+                mock.patch.object(self.volume.driver, 'create_export',
+                                  return_value = None):
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_volume.py
 
             self.volume.driver.vg = fake_lvm.FakeBrickLVM('cinder-volumes',
                                                           False,
@@ -7186,6 +7220,7 @@ class LVMVolumeDriverTestCase(DriverTestCase):
                 '/dev/mapper/cinder--volumes--2-testvol',
                 2048,
                 '1M',
+<<<<<<< HEAD:cinder/tests/unit/test_volume.py
                 execute=mock_execute,
                 sparse=False)
 
@@ -7236,6 +7271,9 @@ class LVMVolumeDriverTestCase(DriverTestCase):
                 '1M',
                 execute=mock_execute,
                 sparse=True)
+=======
+                execute=mock_execute)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_volume.py
 
     @staticmethod
     def _get_manage_existing_lvs(name):
@@ -7339,8 +7377,17 @@ class LVMVolumeDriverTestCase(DriverTestCase):
                           self.volume.driver.manage_existing_get_size,
                           vol, ref)
 
+<<<<<<< HEAD:cinder/tests/unit/test_volume.py
     def test_lvm_manage_existing_snapshot(self):
         """Good pass on managing an LVM snapshot.
+=======
+    def test_lvm_unmanage(self):
+        volume = tests_utils.create_volume(self.context, status='available',
+                                           size=1, host=CONF.host)
+        ret = self.volume.driver.unmanage(volume)
+        self.assertEqual(ret, None)
+
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_volume.py
 
         This test case ensures that, when a logical volume's snapshot with the
         specified name exists, and the size is as expected, no error is

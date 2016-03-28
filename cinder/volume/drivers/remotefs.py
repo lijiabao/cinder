@@ -1024,7 +1024,11 @@ class RemoteFSSnapDriver(RemoteFSDriver, driver.SnapshotVD):
             #      T0       |        T1         |
             #     base      |   snapshot_file   | None
             # (guaranteed to|  (being deleted,  |
+<<<<<<< HEAD
             #    exist)     |  committed down)  |
+=======
+            #    exist)     |   commited down)  |
+>>>>>>> refs/remotes/openstack/stable/kilo
 
             self._img_commit(snapshot_path)
             # Active file has changed
@@ -1033,7 +1037,11 @@ class RemoteFSSnapDriver(RemoteFSDriver, driver.SnapshotVD):
             #      T0        |      T1         |     T2         |      T3
             #     base       |  snapshot_file  |  higher_file   | highest_file
             # (guaranteed to | (being deleted, | (guaranteed to |  (may exist)
+<<<<<<< HEAD
             #   exist, not   | committed down) |  exist, needs  |
+=======
+            #   exist, not   |  commited down) |  exist, needs  |
+>>>>>>> refs/remotes/openstack/stable/kilo
             #   used here)   |                 |   ptr update)  |
 
             backing_chain = self._get_backing_chain_for_path(
@@ -1208,6 +1216,7 @@ class RemoteFSSnapDriver(RemoteFSDriver, driver.SnapshotVD):
             * When first snapshot is deleted, Cinder does the snapshot
               deletion. volume-1234.aaaa is removed from the snapshot chain.
               The data from it is merged into its parent.
+<<<<<<< HEAD
 
               volume-1234.bbbb is rebased, having volume-1234 as its new
               parent.
@@ -1225,6 +1234,25 @@ class RemoteFSSnapDriver(RemoteFSDriver, driver.SnapshotVD):
 
               volume-1234
 
+=======
+
+              volume-1234.bbbb is rebased, having volume-1234 as its new
+              parent.
+
+              volume-1234 <- volume-1234.bbbb
+
+              info file: { 'active': 'volume-1234.bbbb',
+                           'bbbb':   'volume-1234.bbbb'
+                         }
+
+            * When second snapshot is deleted, Cinder does the snapshot
+              deletion. volume-1234.aaaa is removed from the snapshot chain.
+              The base image, volume-1234 becomes the active image for this
+              volume again.
+
+              volume-1234
+
+>>>>>>> refs/remotes/openstack/stable/kilo
               info file: { 'active': 'volume-1234' }  (* changed!)
         """
 

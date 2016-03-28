@@ -200,12 +200,18 @@ class NetAppCmodeNfsDriverTestCase(test.TestCase):
 
         mox.ReplayAll()
 
+<<<<<<< HEAD:cinder/tests/unit/test_netapp_nfs.py
         self.mock_object(drv, '_do_qos_for_volume')
         self.mock_object(utils, 'get_volume_extra_specs')
 
         loc = drv.create_volume_from_snapshot(volume, snapshot)
 
         self.assertEqual(expected_result, loc)
+=======
+        loc = drv.create_volume_from_snapshot(volume, snapshot)
+
+        self.assertEqual(loc, expected_result)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_netapp_nfs.py
 
         mox.VerifyAll()
 
@@ -619,7 +625,10 @@ class NetAppCmodeNfsDriverTestCase(test.TestCase):
         mox.StubOutWithMock(image_utils, 'convert_image')
         mox.StubOutWithMock(drv, '_register_image_in_cache')
         mox.StubOutWithMock(drv, '_is_share_clone_compatible')
+<<<<<<< HEAD:cinder/tests/unit/test_netapp_nfs.py
         mox.StubOutWithMock(drv, '_do_qos_for_volume')
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_netapp_nfs.py
         mox.StubOutWithMock(drv, 'local_path')
 
         utils.get_volume_extra_specs(mox_lib.IgnoreArg())

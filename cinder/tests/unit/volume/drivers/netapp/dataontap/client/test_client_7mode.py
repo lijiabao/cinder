@@ -1,6 +1,9 @@
 # Copyright (c) 2014 Alex Meade.  All rights reserved.
 # Copyright (c) 2015 Dustin Schoenbrun. All rights reserved.
+<<<<<<< HEAD:cinder/tests/unit/volume/drivers/netapp/dataontap/client/test_client_7mode.py
 # Copyright (c) 2016 Mike Rooney. All rights reserved.
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/volume/drivers/netapp/dataontap/client/test_client_7mode.py
 # All Rights Reserved.
 #
 #    Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -675,6 +678,7 @@ class NetApp7modeClientTestCase(test.TestCase):
 
         self.assertEqual(expected_total_bytes, total_bytes)
         self.assertEqual(expected_available_bytes, available_bytes)
+<<<<<<< HEAD:cinder/tests/unit/volume/drivers/netapp/dataontap/client/test_client_7mode.py
 
     def test_get_performance_instance_names(self):
 
@@ -809,3 +813,5 @@ class NetApp7modeClientTestCase(test.TestCase):
 
         self.assertRaises(exception.SnapshotNotFound, self.client.get_snapshot,
                           expected_vol_name, expected_snapshot_name)
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/volume/drivers/netapp/dataontap/client/test_client_7mode.py

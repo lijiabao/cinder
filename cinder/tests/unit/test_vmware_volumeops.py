@@ -1244,6 +1244,7 @@ class VolumeOpsTestCase(test.TestCase):
         name = mock.sentinel.name
         backing = mock.sentinel.backing
         snapshot = mock.sentinel.snapshot
+<<<<<<< HEAD:cinder/tests/unit/test_vmware_volumeops.py
         datastore = mock.sentinel.datastore
         disk_type = mock.sentinel.disk_type
         host = mock.sentinel.host
@@ -1258,6 +1259,57 @@ class VolumeOpsTestCase(test.TestCase):
             self.assertFalse(get_folder.called)
         else:
             get_folder.assert_called_once_with(backing)
+=======
+        clone_type = "anything-other-than-linked"
+        datastore = mock.sentinel.datstore
+        ret = self.vops.clone_backing(name, backing, snapshot, clone_type,
+                                      datastore)
+        # verify calls
+        self.assertEqual(mock.sentinel.new_backing, ret)
+        disk_move_type = 'moveAllDiskBackingsAndDisallowSharing'
+        get_clone_spec.assert_called_with(datastore, disk_move_type, snapshot,
+                                          backing, None, None, None)
+        expected = [mock.call(vim_util, 'get_object_property',
+                              self.session.vim, backing, 'parent'),
+                    mock.call(self.session.vim, 'CloneVM_Task', backing,
+                              folder=folder, name=name, spec=clone_spec)]
+        self.assertEqual(expected, self.session.invoke_api.mock_calls)
+
+        # Test linked clone_backing
+        clone_type = volumeops.LINKED_CLONE_TYPE
+        self.session.invoke_api.reset_mock()
+        ret = self.vops.clone_backing(name, backing, snapshot, clone_type,
+                                      datastore)
+        # verify calls
+        self.assertEqual(mock.sentinel.new_backing, ret)
+        disk_move_type = 'createNewChildDiskBacking'
+        get_clone_spec.assert_called_with(datastore, disk_move_type, snapshot,
+                                          backing, None, None, None)
+        expected = [mock.call(vim_util, 'get_object_property',
+                              self.session.vim, backing, 'parent'),
+                    mock.call(self.session.vim, 'CloneVM_Task', backing,
+                              folder=folder, name=name, spec=clone_spec)]
+        self.assertEqual(expected, self.session.invoke_api.mock_calls)
+
+        # Test disk type conversion and target host.
+        clone_type = None
+        disk_type = 'thin'
+        host = mock.sentinel.host
+        rp = mock.sentinel.rp
+        self.session.invoke_api.reset_mock()
+        ret = self.vops.clone_backing(name, backing, snapshot, clone_type,
+                                      datastore, disk_type, host, rp)
+
+        self.assertEqual(mock.sentinel.new_backing, ret)
+        disk_move_type = 'moveAllDiskBackingsAndDisallowSharing'
+        get_clone_spec.assert_called_with(datastore, disk_move_type, snapshot,
+                                          backing, disk_type, host, rp)
+        expected = [mock.call(vim_util, 'get_object_property',
+                              self.session.vim, backing, 'parent'),
+                    mock.call(self.session.vim, 'CloneVM_Task', backing,
+                              folder=folder, name=name, spec=clone_spec)]
+        self.assertEqual(expected, self.session.invoke_api.mock_calls)
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/tests/test_vmware_volumeops.py
 
         if clone_type == 'linked':
             exp_disk_move_type = 'createNewChildDiskBacking'

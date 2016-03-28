@@ -273,7 +273,11 @@ class BlockDeviceDriver(driver.BaseVD, driver.LocalVD,
                 volume_path)
         return model_update
 
+<<<<<<< HEAD
     def create_export(self, context, volume, connector):
+=======
+    def create_export(self, context, volume):
+>>>>>>> refs/remotes/openstack/stable/kilo
         volume_path = self.local_path(volume)
         export_info = self.target_driver.create_export(context,
                                                        volume,

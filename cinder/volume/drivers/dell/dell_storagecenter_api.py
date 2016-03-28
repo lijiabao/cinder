@@ -32,8 +32,13 @@ class PayloadFilter(object):
     """PayloadFilter
 
     Simple class for creating filters for interacting with the Dell
+<<<<<<< HEAD
     Storage API 15.3 and later.
     """
+=======
+    Storage API DropTop2 and later.
+    '''
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def __init__(self, filtertype='AND'):
         self.payload = {}
@@ -50,11 +55,20 @@ class PayloadFilter(object):
 
 
 class LegacyPayloadFilter(object):
+<<<<<<< HEAD
     """LegacyPayloadFilter
 
     Simple class for creating filters for interacting with the Dell
     Storage API 15.1 and 15.2.
     """
+=======
+
+    '''LegacyPayloadFilter
+
+    Simple class for creating filters for interacting with the Dell
+    Storage API pre DropTop2.
+    '''
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def __init__(self, filter_type='AND'):
         self.payload = {'filterType': filter_type,
@@ -212,6 +226,10 @@ class StorageCenterApiHelper(object):
                 data=_('Configuration error: dell_sc_ssn not set.'))
         return connection
 
+<<<<<<< HEAD
+=======
+    APIVERSION = '1.0.2'
+>>>>>>> refs/remotes/openstack/stable/kilo
 
 class StorageCenterApi(object):
     """StorageCenterApi
@@ -247,6 +265,7 @@ class StorageCenterApi(object):
         :param apiversion: Version used on login.
         """
         self.notes = 'Created by Dell Cinder Driver'
+<<<<<<< HEAD
         self.repl_prefix = 'Cinder repl of '
         self.ssn = None
         self.failed_over = False
@@ -260,6 +279,13 @@ class StorageCenterApi(object):
         self.is_direct_connect = False
         self.client = HttpClient(host, port, user, password,
                                  verify, apiversion)
+=======
+        self.legacypayloadfilters = False
+        self.client = HttpClient(host,
+                                 port,
+                                 user,
+                                 password)
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def __enter__(self):
         return self
@@ -411,6 +437,7 @@ class StorageCenterApi(object):
             return LegacyPayloadFilter(filterType)
         return PayloadFilter(filterType)
 
+<<<<<<< HEAD
     def _check_version_fail(self, payload, response):
         try:
             # Is it even our error?
@@ -434,6 +461,8 @@ class StorageCenterApi(object):
         # Just eat this if it isn't a version error.
         return response
 
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
     def open_connection(self):
         """Authenticate with Dell REST interface.
 
@@ -443,6 +472,7 @@ class StorageCenterApi(object):
         # Login
         payload = {}
         payload['Application'] = 'Cinder REST Driver'
+<<<<<<< HEAD
         payload['ApplicationVersion'] = self.APIDRIVERVERSION
         LOG.debug('open_connection %s',
                   self.client.header['x-dell-api-version'])
@@ -476,6 +506,42 @@ class StorageCenterApi(object):
             # Good return but not the login response we were expecting.
             # Log it and error out.
             LOG.error(_LE('Unrecognized Login Response: %s'), r)
+=======
+        payload['ApplicationVersion'] = self.APIVERSION
+        r = self.client.post('ApiConnection/Login',
+                             payload)
+
+        if r.status_code == 200:
+            # We should be logged in.  Try to grab the api version out of the
+            # response.
+            try:
+                apidict = self._get_json(r)
+                version = apidict['apiVersion']
+                splitver = version.split('.')
+                if splitver[0] == '2':
+                    if splitver[1] == '0' or splitver[1] == '1':
+                        self.legacypayloadfilters = True
+                return
+
+            except Exception:
+                # Good return but not the login response we were expecting.
+                # Log it and error out.
+                LOG.error(_LE('Unrecognized Login Response: %s'), r)
+        else:
+            # Call error.
+            LOG.error(_LE('Login error: %(code)d %(reason)s'),
+                      {'code': r.status_code,
+                       'reason': r.reason})
+
+            # Bad request.
+            # TODO(Swanson): Should add this to all returns.
+            if r.status_code == 400:
+                LOG.debug('Bad Request. Return text: %s', r.text)
+
+        # If we fell to this point then raise an exception.
+        raise exception.VolumeBackendAPIException(
+            _('Failed to connect to Enterprise Manager'))
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def close_connection(self):
         """Logout of Dell REST API."""
@@ -588,6 +654,7 @@ class StorageCenterApi(object):
         we look for the end folder and check that the rest of the path is
         right.
 
+<<<<<<< HEAD
         The REST url sent in defines the folder type being created on the Dell
         Storage Center backend.  Thus this is generic to server and volume
         folders.
@@ -600,6 +667,12 @@ class StorageCenterApi(object):
         """
         pf = self._get_payload_filter()
         pf.append('scSerialNumber', self.ssn)
+=======
+        This is generic to server and volume folders.
+        '''
+        pf = self._get_payload_filter()
+        pf.append('scSerialNumber', ssn)
+>>>>>>> refs/remotes/openstack/stable/kilo
         basename = os.path.basename(foldername)
         pf.append('Name', basename)
         # If we have any kind of path we throw it into the filters.
@@ -641,8 +714,12 @@ class StorageCenterApi(object):
         it.  This initializes the volume.
 
         Don't wig out if this fails.
+<<<<<<< HEAD
         :param scvolume: Dell Volume object.
         """
+=======
+        '''
+>>>>>>> refs/remotes/openstack/stable/kilo
         pf = self._get_payload_filter()
         pf.append('scSerialNumber', scvolume.get('scSerialNumber'), 'Equals')
         r = self.client.post('StorageCenter/ScServer/GetList', pf.payload)
@@ -672,6 +749,7 @@ class StorageCenterApi(object):
         # a volume without first putting some data in that volume.
         LOG.warning(_LW('Volume initialization failure. (%s)'),
                     self._get_id(scvolume))
+<<<<<<< HEAD
 
     def _find_storage_profile(self, storage_profile):
         """Looks for a Storage Profile on the array.
@@ -704,6 +782,8 @@ class StorageCenterApi(object):
                 if name == storage_profile:
                     return profile
         return None
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def _find_user_replay_profiles(self):
         """Find user default profiles.
@@ -890,6 +970,7 @@ class StorageCenterApi(object):
 
         return scvolume
 
+<<<<<<< HEAD
     def _get_volume_list(self, name, deviceid, filterbyvfname=True):
         """Return the specified list of volumes.
 
@@ -943,6 +1024,24 @@ class StorageCenterApi(object):
 
         # Cannot find a volume without the name
         if name is None:
+=======
+    def find_volume(self, ssn, name=None, instanceid=None):
+        '''search ssn for volume of name and/or instance id
+        '''
+        LOG.debug('finding volume %(sn)s : %(name)s : %(id)s',
+                  {'sn': ssn,
+                   'name': name,
+                   'id': instanceid})
+        pf = self._get_payload_filter()
+        pf.append('scSerialNumber', ssn)
+        # We need at least a name and or an instance id.  If we have
+        # that we can find a volume.
+        if instanceid is not None:
+            pf.append('instanceId', instanceid)
+        elif name is not None:
+            pf.append('Name', name)
+        else:
+>>>>>>> refs/remotes/openstack/stable/kilo
             return None
 
         # Look for our volume in our folder.
@@ -1060,6 +1159,7 @@ class StorageCenterApi(object):
             return False
         return True
 
+<<<<<<< HEAD
     def _find_serveros(self, osname='Red Hat Linux 6.x'):
         """Returns the serveros instance id of the specified osname.
 
@@ -1073,6 +1173,16 @@ class StorageCenterApi(object):
         """
         pf = self._get_payload_filter()
         pf.append('scSerialNumber', self.ssn)
+=======
+    # We do not know that we are red hat linux 6.x but that works
+    # best for red hat and ubuntu.  So, there.
+    def _find_serveros(self, ssn, osname='Red Hat Linux 6.x'):
+        '''Returns the serveros instance id of the specified osname.
+        Required to create a server.
+        '''
+        pf = self._get_payload_filter()
+        pf.append('scSerialNumber', ssn)
+>>>>>>> refs/remotes/openstack/stable/kilo
         r = self.client.post('StorageCenter/ScServerOperatingSystem/GetList',
                              pf.payload)
         # 200 expected.
@@ -1186,7 +1296,11 @@ class StorageCenterApi(object):
         # server.
         if hba is not None and hba.get('server') is not None:
             pf = self._get_payload_filter()
+<<<<<<< HEAD
             pf.append('scSerialNumber', self.ssn)
+=======
+            pf.append('scSerialNumber', ssn)
+>>>>>>> refs/remotes/openstack/stable/kilo
             pf.append('instanceId', self._get_id(hba['server']))
             r = self.client.post('StorageCenter/ScServer/GetList',
                                  pf.payload)
@@ -1211,7 +1325,11 @@ class StorageCenterApi(object):
         scserverhba = None
         # We search for our server by first finding our HBA
         pf = self._get_payload_filter()
+<<<<<<< HEAD
         pf.append('scSerialNumber', self.ssn)
+=======
+        pf.append('scSerialNumber', ssn)
+>>>>>>> refs/remotes/openstack/stable/kilo
         pf.append('instanceName', instance_name)
         r = self.client.post('StorageCenter/ScServerHba/GetList',
                              pf.payload)
@@ -1294,6 +1412,7 @@ class StorageCenterApi(object):
         return mappings
 
     def _find_mapping_profiles(self, scvolume):
+<<<<<<< HEAD
         """Find the Dell volume object mapping profiles.
 
         :param scvolume: Dell volume object.
@@ -1309,6 +1428,27 @@ class StorageCenterApi(object):
             LOG.error(_LE('Unable to find mapping profiles: %s'),
                       scvolume.get('name'))
         LOG.debug(mapping_profiles)
+=======
+        '''Find the Dell volume object mapping profiles.
+
+        :param scvolume: Dell volume object.
+        :returns: A list of Dell mapping profile objects.
+        '''
+        mapping_profiles = []
+        if scvolume.get('active', False):
+            r = self.client.get('StorageCenter/ScVolume/%s/MappingProfileList'
+                                % self._get_id(scvolume))
+            if r.status_code == 200:
+                mapping_profiles = self._get_json(r)
+            else:
+                LOG.debug('MappingProfileList error: %(code)d %(reason)s',
+                          {'code': r.status_code,
+                           'reason': r.reason})
+                LOG.error(_LE('Unable to find volume mapping profiles: %s'),
+                          scvolume.get('name'))
+        else:
+            LOG.error(_LE('_find_mappings: volume is not active'))
+>>>>>>> refs/remotes/openstack/stable/kilo
         return mapping_profiles
 
     def _find_controller_port(self, cportid):
@@ -1464,6 +1604,56 @@ class StorageCenterApi(object):
                       cportid)
         return controllerport
 
+    def _is_virtualport_mode(self, ssn):
+        isvpmode = False
+        r = self.client.get('StorageCenter/ScConfiguration/%s' % ssn)
+        if r.status_code == 200:
+            scconfig = self._get_json(r)
+            if scconfig:
+                isvpmode = True if (scconfig['iscsiTransportMode'] ==
+                                    'VirtualPort') else False
+        return isvpmode
+
+    def _find_controller_port_iscsi_config(self, cportid):
+        '''Finds the SC controller port object for the specified cportid.
+
+        :param cportid: The instanceID of the Dell backend controller port.
+        :returns: The controller port object.
+        '''
+        controllerport = None
+        r = self.client.get('StorageCenter/'
+                            'ScControllerPortIscsiConfiguration/%s'
+                            % cportid)
+        if r.status_code == 200:
+            controllerport = self._first_result(r)
+        else:
+            LOG.debug('ScControllerPortIscsiConfiguration error: '
+                      '%(code)d %(reason)s',
+                      {'code': r.status_code,
+                       'reason': r.reason})
+            LOG.error(_LE('Unable to find controller '
+                          'port iscsi configuration: %s'),
+                      cportid)
+        return controllerport
+
+    def _get_controller_id(self, mapping):
+        # The mapping lists the associated controller.
+        return self._get_id(mapping.get('controller'))
+
+    def _get_domains(self, mapping):
+        # Return a list of domains associated with this controller port.
+        return self._find_domains(self._get_id(mapping.get('controllerPort')))
+
+    def _get_iqn(self, mapping):
+        # Get our iqn from the controller port listed in our our mapping.
+        iqn = None
+        cportid = self._get_id(mapping.get('controllerPort'))
+        controllerport = self._find_controller_port(cportid)
+        LOG.debug('controllerport: %s', controllerport)
+        if controllerport:
+            iqn = controllerport.get('iscsiName')
+        return iqn
+
     def find_iscsi_properties(self, scvolume, ip=None, port=None):
         """Finds target information for a given Dell scvolume object mapping.
 
@@ -1477,6 +1667,7 @@ class StorageCenterApi(object):
         """
         LOG.debug('enter find_iscsi_properties')
         LOG.debug('scvolume: %s', scvolume)
+<<<<<<< HEAD
         # Our mutable process object.
         pdata = {'active': -1,
                  'up': -1,
@@ -1490,6 +1681,22 @@ class StorageCenterApi(object):
         # Process just looks for the best port to return.
         def process(lun, iqn, address, port, status, active):
             """Process this mapping information.
+=======
+        luns = []
+        iqns = []
+        portals = []
+        # Our mutable process object.
+        pdata = {'active': -1,
+                 'up': -1,
+                 'access_mode': 'rw',
+                 'ip': ip,
+                 'port': port}
+        # Our output lists.
+
+        # Process just looks for the best port to return.
+        def process(lun, iqn, address, port, readonly, status, active):
+            '''Process this mapping information.
+>>>>>>> refs/remotes/openstack/stable/kilo
 
             :param lun: SCSI Lun.
             :param iqn: iSCSI IQN address.
@@ -1501,7 +1708,11 @@ class StorageCenterApi(object):
             :param active: Boolean indicating whether this is on the active
                            controller or not.
             :return: Nothing
+<<<<<<< HEAD
             """
+=======
+            '''
+>>>>>>> refs/remotes/openstack/stable/kilo
             portals.append(address + ':' +
                            six.text_type(port))
             iqns.append(iqn)
@@ -1519,6 +1730,10 @@ class StorageCenterApi(object):
                 # but we don't actually need the state to be
                 # up at this point.
                 if pdata['up'] == -1:
+<<<<<<< HEAD
+=======
+                    pdata['access_mode'] = 'rw' if readonly is False else 'ro'
+>>>>>>> refs/remotes/openstack/stable/kilo
                     if active:
                         pdata['active'] = len(iqns) - 1
                         if status == 'Up':
@@ -1536,12 +1751,20 @@ class StorageCenterApi(object):
             actvctrl = self._find_active_controller(scvolume)
             # Two different methods are used to find our luns and portals
             # depending on whether we are in virtual or legacy port mode.
+<<<<<<< HEAD
             isvpmode = self._is_virtualport_mode()
+=======
+            isvpmode = self._is_virtualport_mode(scvolume['scSerialNumber'])
+>>>>>>> refs/remotes/openstack/stable/kilo
             # Trundle through our mappings.
             for mapping in mappings:
                 # The lun, ro mode and status are in the mapping.
                 LOG.debug('mapping: %s', mapping)
                 lun = mapping.get('lun')
+<<<<<<< HEAD
+=======
+                ro = mapping.get('readOnly', False)
+>>>>>>> refs/remotes/openstack/stable/kilo
                 status = mapping.get('status')
                 # Get our IQN from our mapping.
                 iqn = self._get_iqn(mapping)
@@ -1559,7 +1782,11 @@ class StorageCenterApi(object):
                             portnumber = dom.get('portNumber')
                             # We have all our information. Process this portal.
                             process(lun, iqn, ipaddress, portnumber,
+<<<<<<< HEAD
                                     status, isactive)
+=======
+                                    ro, status, isactive)
+>>>>>>> refs/remotes/openstack/stable/kilo
                 # Else we are in legacy mode.
                 elif iqn:
                     # Need to get individual ports
@@ -1573,7 +1800,11 @@ class StorageCenterApi(object):
                         portnumber = cpconfig.get('portNumber')
                         # We have all our information.  Process this portal.
                         process(lun, iqn, ipaddress, portnumber,
+<<<<<<< HEAD
                                 status, isactive)
+=======
+                                ro, status, isactive)
+>>>>>>> refs/remotes/openstack/stable/kilo
 
         # We've gone through all our mappings.
         # Make sure we found something to return.
@@ -1581,7 +1812,11 @@ class StorageCenterApi(object):
             # Since we just mapped this and can't find that mapping the world
             # is wrong so we raise exception.
             raise exception.VolumeBackendAPIException(
+<<<<<<< HEAD
                 data=_('Unable to find iSCSI mappings.'))
+=======
+                _('Unable to find iSCSI mappings.'))
+>>>>>>> refs/remotes/openstack/stable/kilo
 
         # Make sure we point to the best portal we can.  This means it is
         # on the active controller and, preferably, up.  If it isn't return
@@ -1603,11 +1838,19 @@ class StorageCenterApi(object):
                 'target_portals': portals,
                 'target_lun': luns[pdata['active']],
                 'target_luns': luns,
+<<<<<<< HEAD
+=======
+                'access_mode': pdata['access_mode']
+>>>>>>> refs/remotes/openstack/stable/kilo
                 }
         LOG.debug('find_iscsi_properties return: %s',
                   data)
 
+<<<<<<< HEAD
         return data
+=======
+        return pdata['active'], data
+>>>>>>> refs/remotes/openstack/stable/kilo
 
     def map_volume(self, scvolume, scserver):
         """Maps the Dell backend volume object to the Dell server object.
@@ -1615,10 +1858,20 @@ class StorageCenterApi(object):
         The check for the Dell server object existence is elsewhere;  does not
         create the Dell server object.
 
+<<<<<<< HEAD
         :param scvolume: Storage Center volume object.
         :param scserver: Storage Center server opbject.
         :returns: SC mapping profile or None
         """
+=======
+        The check for server existence is elsewhere;  does not create the
+        server.
+
+        :param scvolume: Storage Center volume object.
+        :param scserver: Storage Center server opbject.
+        :returns: SC mapping profile or None
+        '''
+>>>>>>> refs/remotes/openstack/stable/kilo
         # Make sure we have what we think we have
         serverid = self._get_id(scserver)
         volumeid = self._get_id(scvolume)
@@ -1668,6 +1921,7 @@ class StorageCenterApi(object):
                 if prosrv is not None and self._get_id(prosrv) == serverid:
                     r = self.client.delete('StorageCenter/ScMappingProfile/%s'
                                            % self._get_id(profile))
+<<<<<<< HEAD
                     # 200 expected.
                     if self._check_result(r):
                         # Check our result in the json.
@@ -1688,6 +1942,22 @@ class StorageCenterApi(object):
                     rtn = False
                     break
         # return true/false.
+=======
+                    if (r.status_code != 200 or r.ok is False):
+                        LOG.debug('ScMappingProfile error: '
+                                  '%(code)d %(reason)s',
+                                  {'code': r.status_code,
+                                   'reason': r.reason})
+                        LOG.error(_LE('Unable to unmap Volume %s'),
+                                  volumeid)
+                        # 1 failed unmap is as good as 100.
+                        # Fail it and leave
+                        rtn = False
+                        break
+                    LOG.debug('Volume %(vol)s unmapped from %(srv)s',
+                              {'vol': volumeid,
+                               'srv': serverid})
+>>>>>>> refs/remotes/openstack/stable/kilo
         return rtn
 
     def get_storage_usage(self):
@@ -1936,6 +2206,7 @@ class StorageCenterApi(object):
         return vol
 
     def rename_volume(self, scvolume, name):
+<<<<<<< HEAD
         """Rename scvolume to name.
 
         This is mostly used by update_migrated_volume.
@@ -1944,11 +2215,14 @@ class StorageCenterApi(object):
         :param name: The new volume name.
         :returns: Boolean indicating success or failure.
         """
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
         payload = {}
         payload['Name'] = name
         r = self.client.post('StorageCenter/ScVolume/%s/Modify'
                              % self._get_id(scvolume),
                              payload)
+<<<<<<< HEAD
         # 200 expected.
         if not self._check_result(r):
             LOG.error(_LE('Error renaming volume %(original)s to %(name)s'),
@@ -2022,6 +2296,17 @@ class StorageCenterApi(object):
             return {}
         return self._get_json(r)
 
+=======
+        if r.status_code != 200:
+            LOG.error(_LE('Error renaming volume %(o)s to %(n)s: %(c)d %(r)s'),
+                      {'o': scvolume['name'],
+                       'n': name,
+                       'c': r.status_code,
+                       'r': r.reason})
+            return False
+        return True
+
+>>>>>>> refs/remotes/openstack/stable/kilo
     def _delete_server(self, scserver):
         """Deletes scserver from the backend.
 

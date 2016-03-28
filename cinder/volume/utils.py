@@ -640,6 +640,7 @@ def append_host(host, pool):
     return new_host
 
 
+<<<<<<< HEAD
 def matching_backend_name(src_volume_type, volume_type):
     if src_volume_type.get('volume_backend_name') and \
             volume_type.get('volume_backend_name'):
@@ -736,3 +737,7 @@ def process_reserve_over_quota(context, overs, usages, quotas, size):
             LOG.warning(msg, {'s_pid': context.project_id,
                               'd_consumed': _consumed(over)})
             raise exception.SnapshotLimitExceeded(allowed=quotas[over])
+=======
+def hosts_are_equivalent(host_1, host_2):
+    return extract_host(host_1) == extract_host(host_2)
+>>>>>>> refs/remotes/openstack/stable/kilo

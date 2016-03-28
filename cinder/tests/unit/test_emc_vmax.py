@@ -2304,6 +2304,20 @@ class EMCVMAXISCSIDriverNoFastTestCase(test.TestCase):
             vol['name'], extraSpecs)
         self.assertTrue(return_to_default)
 
+    def test_get_hardware_type(self):
+        iqn_initiator = 'iqn.1992-04.com.emc: 50000973f006dd80'
+        hardwaretypeid = (
+            self.driver.utils._get_hardware_type(iqn_initiator))
+        self.assertEqual(5, hardwaretypeid)
+        wwpn_initiator = '123456789012345'
+        hardwaretypeid = (
+            self.driver.utils._get_hardware_type(wwpn_initiator))
+        self.assertEqual(2, hardwaretypeid)
+        bogus_initiator = 'bogus'
+        hardwaretypeid = (
+            self.driver.utils._get_hardware_type(bogus_initiator))
+        self.assertEqual(0, hardwaretypeid)
+
     def test_wait_for_job_complete(self):
         myjob = SE_ConcreteJob()
         myjob.classname = 'SE_ConcreteJob'

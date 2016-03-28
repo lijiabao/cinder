@@ -199,6 +199,7 @@ class HPE3PARCommon(object):
         2.0.38 - Add stats for hp3par goodness_function and filter_function
         2.0.39 - Added support for updated detach_volume attachment.
         2.0.40 - Make the 3PAR drivers honor the pool in create  bug #1432876
+<<<<<<< HEAD:cinder/volume/drivers/hpe/hpe_3par_common.py
         2.0.41 - Only log versions at startup.  bug #1447697
         2.0.42 - Fix type for snapshot config settings. bug #1461640
         2.0.43 - Report the capability of supporting multiattach
@@ -235,6 +236,13 @@ class HPE3PARCommon(object):
     """
 
     VERSION = "3.0.18"
+=======
+        2.0.41 - Improved VLUN creation and deletion logic. #1469816
+
+    """
+
+    VERSION = "2.0.41"
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/san/hp/hp_3par_common.py
 
     stats = {}
 
@@ -1437,7 +1445,11 @@ class HPE3PARCommon(object):
         vluns = []
         try:
             vluns = self.client.getHostVLUNs(hostname)
+<<<<<<< HEAD:cinder/volume/drivers/hpe/hpe_3par_common.py
         except hpeexceptions.HTTPNotFound:
+=======
+        except hpexceptions.HTTPNotFound:
+>>>>>>> refs/remotes/openstack/stable/kilo:cinder/volume/drivers/san/hp/hp_3par_common.py
             LOG.debug("All VLUNs removed from host %s", hostname)
             pass
 

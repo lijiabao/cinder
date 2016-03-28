@@ -471,6 +471,7 @@ class Client(client_base.Client):
             flexvol_info.get_child_content('size-available'))
 
         return total_bytes, available_bytes
+<<<<<<< HEAD
 
     def get_performance_instance_names(self, object_name):
         """Get names of performance instances for a node."""
@@ -583,3 +584,5 @@ class Client(client_base.Client):
             raise exception.SnapshotNotFound(snapshot_id=snapshot_name)
 
         return snapshot
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo

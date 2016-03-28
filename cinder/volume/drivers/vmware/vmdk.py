@@ -939,11 +939,16 @@ class VMwareVcVmdkDriver(driver.VolumeDriver):
 
             if disk_conversion:
                 # Clone the temporary backing for disk type conversion.
+<<<<<<< HEAD
                 (host, rp, folder, summary) = self._select_ds_for_volume(
+=======
+                (host, rp, _folder, summary) = self._select_ds_for_volume(
+>>>>>>> refs/remotes/openstack/stable/kilo
                     volume)
                 datastore = summary.datastore
                 LOG.debug("Cloning temporary backing: %s for disk type "
                           "conversion.", backing)
+<<<<<<< HEAD
                 clone = self.volumeops.clone_backing(volume['name'],
                                                      backing,
                                                      None,
@@ -953,6 +958,16 @@ class VMwareVcVmdkDriver(driver.VolumeDriver):
                                                      host=host,
                                                      resource_pool=rp,
                                                      folder=folder)
+=======
+                self.volumeops.clone_backing(volume['name'],
+                                             backing,
+                                             None,
+                                             volumeops.FULL_CLONE_TYPE,
+                                             datastore,
+                                             disk_type,
+                                             host,
+                                             rp)
+>>>>>>> refs/remotes/openstack/stable/kilo
                 self._delete_temp_backing(backing)
                 backing = clone
             self.volumeops.update_backing_disk_uuid(backing, volume['id'])
@@ -1313,11 +1328,16 @@ class VMwareVcVmdkDriver(driver.VolumeDriver):
 
                     new_backing = self.volumeops.clone_backing(
                         volume['name'], backing, None,
+<<<<<<< HEAD
                         volumeops.FULL_CLONE_TYPE, datastore,
                         disk_type=new_disk_type, host=host,
                         resource_pool=rp, folder=folder)
                     self.volumeops.update_backing_disk_uuid(new_backing,
                                                             volume['id'])
+=======
+                        volumeops.FULL_CLONE_TYPE, datastore, new_disk_type,
+                        host, rp)
+>>>>>>> refs/remotes/openstack/stable/kilo
                     self._delete_temp_backing(backing)
                     backing = new_backing
                 except exceptions.VimException:
@@ -1555,16 +1575,24 @@ class VMwareVcVmdkDriver(driver.VolumeDriver):
         renamed = False
         try:
             # Find datastore for clone.
+<<<<<<< HEAD
             (host, rp, folder, summary) = self._select_ds_for_volume(volume)
+=======
+            (host, rp, _folder, summary) = self._select_ds_for_volume(volume)
+>>>>>>> refs/remotes/openstack/stable/kilo
             datastore = summary.datastore
 
             disk_type = VMwareVcVmdkDriver._get_disk_type(volume)
             dest = self.volumeops.clone_backing(dest_name, src, None,
                                                 volumeops.FULL_CLONE_TYPE,
+<<<<<<< HEAD
                                                 datastore, disk_type=disk_type,
                                                 host=host, resource_pool=rp,
                                                 folder=folder)
             self.volumeops.update_backing_disk_uuid(dest, volume['id'])
+=======
+                                                datastore, disk_type, host, rp)
+>>>>>>> refs/remotes/openstack/stable/kilo
             if new_backing:
                 LOG.debug("Created new backing: %s for restoring backup.",
                           dest_name)
@@ -1929,18 +1957,28 @@ class VMwareVcVmdkDriver(driver.VolumeDriver):
         datastore = None
         host = None
         rp = None
+<<<<<<< HEAD
         folder = None
         if not clone_type == volumeops.LINKED_CLONE_TYPE:
             # Pick a datastore where to create the full clone under any host
             (host, rp, folder, summary) = self._select_ds_for_volume(volume)
+=======
+        if not clone_type == volumeops.LINKED_CLONE_TYPE:
+            # Pick a datastore where to create the full clone under any host
+            (host, rp, _folder, summary) = self._select_ds_for_volume(volume)
+>>>>>>> refs/remotes/openstack/stable/kilo
             datastore = summary.datastore
         extra_config = self._get_extra_config(volume)
         clone = self.volumeops.clone_backing(volume['name'], backing,
                                              snapshot, clone_type, datastore,
+<<<<<<< HEAD
                                              host=host, resource_pool=rp,
                                              extra_config=extra_config,
                                              folder=folder)
         self.volumeops.update_backing_disk_uuid(clone, volume['id'])
+=======
+                                             host=host, resource_pool=rp)
+>>>>>>> refs/remotes/openstack/stable/kilo
         # If the volume size specified by the user is greater than
         # the size of the source volume, the newly created volume will
         # allocate the capacity to the size of the source volume in the backend

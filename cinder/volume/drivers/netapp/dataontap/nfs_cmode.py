@@ -25,8 +25,11 @@ import os
 import uuid
 
 from oslo_log import log as logging
+<<<<<<< HEAD
 from oslo_service import loopingcall
 from oslo_utils import excutils
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
 import six
 
 from cinder import exception
@@ -184,7 +187,11 @@ class NetAppCmodeNfsDriver(nfs_base.NetAppNfsDriver):
 
             pool = dict()
             pool['pool_name'] = nfs_share
+<<<<<<< HEAD
             pool['QoS_support'] = True
+=======
+            pool['QoS_support'] = False
+>>>>>>> refs/remotes/openstack/stable/kilo
             pool.update(capacity)
 
             # add SSC content if available
@@ -347,6 +354,7 @@ class NetAppCmodeNfsDriver(nfs_base.NetAppNfsDriver):
         """Deletes a logical volume."""
         share = volume['provider_location']
         self._delete_backing_file_for_volume(volume)
+<<<<<<< HEAD
         try:
             qos_policy_group_info = na_utils.get_valid_qos_policy_group_info(
                 volume)
@@ -356,6 +364,8 @@ class NetAppCmodeNfsDriver(nfs_base.NetAppNfsDriver):
             # Don't blow up here if something went wrong de-provisioning the
             # QoS policy for the volume.
             pass
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
         self._post_prov_deprov_in_ssc(share)
 
     def _delete_backing_file_for_volume(self, volume):
@@ -380,14 +390,20 @@ class NetAppCmodeNfsDriver(nfs_base.NetAppNfsDriver):
                   'filer.', path_on_filer, volume['id'])
         self.zapi_client.delete_file(path_on_filer)
 
+<<<<<<< HEAD
     @utils.trace_method
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
     def delete_snapshot(self, snapshot):
         """Deletes a snapshot."""
         share = self._get_provider_location(snapshot.volume_id)
         self._delete_backing_file_for_snapshot(snapshot)
         self._post_prov_deprov_in_ssc(share)
 
+<<<<<<< HEAD
     @utils.trace_method
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
     def _delete_backing_file_for_snapshot(self, snapshot):
         """Deletes file on nfs share that backs a cinder volume."""
         try:
@@ -403,7 +419,10 @@ class NetAppCmodeNfsDriver(nfs_base.NetAppNfsDriver):
                 LOG.exception(_LE('Exec of "rm" command on backing file for'
                                   ' %s was unsuccessful.'), snapshot['id'])
 
+<<<<<<< HEAD
     @utils.trace_method
+=======
+>>>>>>> refs/remotes/openstack/stable/kilo
     def _delete_snapshot_on_filer(self, snapshot):
         (_vserver, flexvol) = self._get_export_ip_path(
             volume_id=snapshot['volume_id'])
